@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado ENEM - Questões 136 a 180</title>
+    <!-- Carregamento do Tailwind CSS para responsividade e design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuração do Tailwind (usa fonte Inter e a nova paleta de cores do index.html) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Cores base extraídas do index.html (Modo Dark)
+                        'fundo': '#0f0f1a', // --cor-fundo (Fundo principal)
+                        'fundo-secundario': '#161622', // --cor-fundo-secundario (Containers, cards)
+                        'text-light': '#eaeaea', // --cor-texto (Cor principal do texto)
+
+                        // Cores de Acento/Botão
+                        'primary-accent': '#12335A', // --primary-color (Header, botões principais)
+                        'secondary-accent': '#3F7996', // --button-hover-bg (Highlight, barra de progresso, seleção)
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- MathJax para renderizar expressões matemáticas em LaTeX -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Estilo para garantir que o texto dentro das questões tenha uma margem */
+        .question-content p {
+            margin-bottom: 1rem;
+        }
+        /* Estilo para a barra de progresso */
+        #progress-bar {
+            transition: width 0.3s ease-in-out;
+        }
+        /* Força a cor do texto do input radio, que o Tailwind pode sobrescrever */
+        .question-content, .question-content strong {
+            color: var(--tw-colors-text-light);
+        }
+    </style>
+</head>
+<!-- Aplica o fundo escuro e a cor do texto principal -->
+<body class="bg-fundo min-h-screen font-sans text-text-light">
+
+    <!-- Container Principal Centrado e Responsivo -->
+    <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Header Fixo/Título - Utiliza a cor primária de acento -->
+        <header class="bg-primary-accent text-text-light p-4 rounded-xl shadow-lg mb-6">
+            <h1 class="text-xl sm:text-2xl font-bold">Simulado ENEM | Matemática e Tecnologias</h1>
+            <p class="text-sm sm:text-base opacity-90">Questões 136 a 180 (45 questões) - Conteúdo Simulado</p>
+        </header>
+
+        <!-- Barra de Progresso - Utiliza a cor secundária de acento -->
+        <div class="w-full bg-fundo-secundario rounded-full h-2.5 mb-6">
+            <div id="progress-bar" class="bg-secondary-accent h-2.5 rounded-full" style="width: 0%"></div>
+        </div>
+
+        <!-- Conteúdo do Quiz (Question Card) - Utiliza o fundo secundário para o card -->
+        <div id="quiz-container" class="bg-fundo-secundario p-6 sm:p-8 rounded-xl shadow-2xl transition-opacity duration-300 border border-primary-accent/50">
+            <!-- Renderizado via JavaScript -->
+            <div id="question-area">
+                <p class="text-center text-text-light/60">Carregando questões...</p>
+            </div>
+            
+            <!-- Botão para Finalizar (agora usa a cor primária) -->
+            <button id="finish-button" onclick="showResults()" 
+                    class="mt-6 w-full py-3 bg-primary-accent hover:bg-secondary-accent text-text-light font-semibold rounded-lg shadow-md transition duration-300 transform hover:scale-[1.01] hidden"
+                    aria-label="Finalizar Simulado e Ver Resultados">
+                Finalizar Simulado e Ver Resultados
+            </button>
+        </div>
+
+        <!-- Controles de Navegação -->
+        <div class="flex justify-between mt-6 space-x-4">
+            <!-- Botão Anterior - Estilo secundário/neutro -->
+            <button id="prev-button" onclick="changeQuestion(-1)" disabled
+                    class="flex-1 py-3 px-4 bg-fundo-secundario hover:bg-primary-accent/50 text-text-light/80 font-semibold rounded-lg shadow-md transition duration-300 transform hover:scale-[1.01] border border-primary-accent/50"
+                    aria-label="Questão Anterior">
+                &larr; Anterior
+            </button>
+            <!-- Botão Próximo - Utiliza a cor primária de acento -->
+            <button id="next-button" onclick="changeQuestion(1)"
+                    class="flex-1 py-3 px-4 bg-primary-accent hover:bg-secondary-accent text-white font-semibold rounded-lg shadow-md transition duration-300 transform hover:scale-[1.01]"
+                    aria-label="Próxima Questão">
+                Próxima &rarr;
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Modal de Resultados (Dark Mode) -->
+    <div id="results-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center hidden">
+        <div class="bg-fundo-secundario p-8 rounded-xl max-w-lg w-11/12 shadow-2xl text-center border border-secondary-accent">
+            <h2 class="text-3xl font-bold mb-4 text-secondary-accent">Resultados Finais!</h2>
+            <p id="score-text" class="text-xl mb-4 text-text-light"></p>
+            <p class="text-text-light/70 mb-6">Parabéns por completar seu simulado! Revise as questões com mais calma agora.</p>
+            <button onclick="closeModal()" class="py-2 px-6 bg-primary-accent hover:bg-secondary-accent text-text-light font-semibold rounded-lg transition duration-300">
+                Fechar
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        const quizData = [];
+        const numQuestions = 45; // De 136 a 180 são 45 questões
+        let currentQuestionIndex = 0;
+        const userAnswers = {}; // {136: 'C', 137: 'A', ...}
+
+        // --- Geração de Dados Simulados (45 Questões) ---
+        // Geração de questões genéricas devido à limitação de acesso ao PDF completo.
+        // A estrutura do ENEM é mantida.
+        const correctOptions = ['A', 'B', 'C', 'D', 'E'];
+        for (let i = 0; i < numQuestions; i++) {
+            const id = 136 + i;
+            const correct = correctOptions[i % correctOptions.length];
+            const isLast = (id === 180);
+
+            let questionText = `(Simulação) **QUESTÃO ${id}**\n\nTexto base para a questão ${id}. Este texto é uma simulação, pois o conteúdo exato das páginas 16 a 32 do PDF não estava totalmente visível no snippet. A questão ${id} envolve um conceito de **Matemática e suas Tecnologias** (Área ${id - 135} de 45).`;
+            let optionA = "Opção A: Uma conclusão incorreta.";
+            let optionB = "Opção B: A alternativa menos provável.";
+            let optionC = "Opção C: O gabarito mais comum.";
+            let optionD = "Opção D: Uma solução complexa.";
+            let optionE = "Opção E: A resposta final.";
+
+            if (id === 179) {
+                // Simulação baseada na estrutura do snippet da Q179
+                questionText = `**QUESTÃO 179**\n\nO esquema, no qual o ponto $H$ representa o local onde está construído o hospital; os pontos $P1$, $P2$ e $P3$, os postos de saúde; e esses quatro pontos estão em um mesmo plano.\n\n[Imagem de um sistema de coordenadas no plano cartesiano com pontos $H, P1, P2, P3$ - Simulação da imagem 65]\n\nA distância, em quilômetro, entre o hospital e cada um dos postos de saúde, é um valor entre`;
+                optionA = "2 e 3.";
+                optionB = "4 e 5.";
+                optionC = "5 e 6.";
+                optionD = "7 e 8.";
+                optionE = "8 e 9.";
+            } else if (id === 180) {
+                // Simulação baseada na estrutura do snippet da Q180
+                questionText = `**QUESTÃO 180**\n\nUm tanque, em formato de paralelepípedo reto retângulo, tem em seu interior dois anteparos verticais, fixados na sua base e em duas paredes opostas, sendo perpendiculares a elas, conforme a figura.\n\n[Imagem de um tanque dividido em três partes desiguais - Simulação da imagem 66]\n\nO tanque é abastecido por uma entrada situada no teto, através de um duto que despeja água a uma vazão constante, sendo necessárias 12 horas para finalizar o seu enchimento. O gráfico que representa o volume de água em função do tempo é:`;
+                optionA = "Gráfico com variação constante (linha reta).";
+                optionB = "Gráfico com inclinação crescente.";
+                optionC = "Gráfico com segmentos de reta de mesma inclinação.";
+                optionD = "Gráfico com segmentos de reta de inclinações decrescentes e depois crescentes.";
+                optionE = "Gráfico com segmentos de reta de inclinações crescentes e depois decrescentes.";
+            }
+
+            quizData.push({
+                id: id,
+                area: "Matemática e suas Tecnologias",
+                question: questionText,
+                options: {
+                    A: optionA,
+                    B: optionB,
+                    C: optionC,
+                    D: optionE, // D and E swapped for diversity
+                    E: optionD,
+                },
+                answer: correct, // Gabarito simulado
+            });
+        }
+        
+        // --- Referências DOM ---
+        const questionArea = document.getElementById('question-area');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const finishButton = document.getElementById('finish-button');
+        const progressBar = document.getElementById('progress-bar');
+        const resultsModal = document.getElementById('results-modal');
+        const scoreText = document.getElementById('score-text');
+
+        // --- Funções de Lógica do Quiz ---
+
+        // Função para converter Markdown básico para HTML (para quebras de linha e negrito)
+        function formatQuestionText(text) {
+            let html = text.replace(/\n/g, '<br>');
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            return html;
+        }
+
+        function renderQuestion() {
+            const q = quizData[currentQuestionIndex];
+            if (!q) return;
+
+            // Atualizar barra de progresso
+            const progress = (currentQuestionIndex / numQuestions) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Construir o HTML da questão
+            let questionHtml = `
+                <div class="mb-4 text-secondary-accent font-semibold text-sm sm:text-base">
+                    ${q.area}
+                </div>
+                <div class="mb-6 question-content text-text-light text-base sm:text-lg leading-relaxed">
+                    <p class="font-bold text-xl mb-4">Questão ${q.id} (${currentQuestionIndex + 1} de ${numQuestions})</p>
+                    ${formatQuestionText(q.question)}
+                </div>
+                <div class="space-y-3" id="options-container">
+            `;
+
+            const optionsKeys = Object.keys(q.options);
+            optionsKeys.forEach(key => {
+                const isChecked = userAnswers[q.id] === key;
+                
+                // Opções formatadas como label/input para acessibilidade e melhor área de clique
+                // Aplica as cores do modo escuro e o highlight azul/ciano
+                questionHtml += `
+                    <label class="block cursor-pointer p-4 rounded-xl transition duration-200 
+                                ${isChecked 
+                                    ? 'bg-secondary-accent/20 border-2 border-secondary-accent shadow-inner' 
+                                    : 'bg-fundo hover:bg-primary-accent/30 border border-primary-accent/50'}">
+                        <input type="radio" name="question_${q.id}" value="${key}" 
+                               class="hidden" 
+                               onchange="handleAnswerSelect(${q.id}, '${key}')"
+                               ${isChecked ? 'checked' : ''}>
+                        <span class="font-semibold mr-2 text-secondary-accent">${key} -</span>
+                        <span class="text-text-light">${q.options[key]}</span>
+                    </label>
+                `;
+            });
+
+            questionHtml += `</div>`;
+            questionArea.innerHTML = questionHtml;
+
+            // Re-renderizar expressões LaTeX após injetar o HTML
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise([questionArea]);
+            }
+
+            // Atualizar estado dos botões de navegação
+            prevButton.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === numQuestions - 1) {
+                nextButton.classList.add('hidden');
+                finishButton.classList.remove('hidden');
+            } else {
+                nextButton.classList.remove('hidden');
+                finishButton.classList.add('hidden');
+                nextButton.disabled = false;
+            }
+        }
+
+        // Armazena a resposta do usuário
+        function handleAnswerSelect(questionId, selectedOption) {
+            userAnswers[questionId] = selectedOption;
+            
+            // Opcional: Avançar automaticamente (desativado para ENEM)
+            // if (currentQuestionIndex < numQuestions - 1) {
+            //     changeQuestion(1);
+            // }
+        }
+
+        function changeQuestion(delta) {
+            const newIndex = currentQuestionIndex + delta;
+            
+            if (newIndex >= 0 && newIndex < numQuestions) {
+                currentQuestionIndex = newIndex;
+                renderQuestion();
+                // Scroll para o topo do quiz-container em dispositivos móveis
+                document.getElementById('quiz-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function showResults() {
+            let score = 0;
+            quizData.forEach(q => {
+                if (userAnswers[q.id] === q.answer) {
+                    score++;
+                }
+            });
+
+            const percentage = ((score / numQuestions) * 100).toFixed(1);
+
+            scoreText.innerHTML = `Você acertou <strong class="text-secondary-accent text-3xl">${score}</strong> de <strong class="text-3xl">${numQuestions}</strong> questões. (${percentage}%)`;
+            
+            // Finaliza a barra de progresso
+            progressBar.style.width = '100%';
+            
+            // Mostra o modal de resultados
+            resultsModal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            resultsModal.classList.add('hidden');
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuestion();
+        });
+
+    </script>
+</body>
+</html>

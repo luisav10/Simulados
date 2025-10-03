@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20% Educacional - Menu Simulado</title>
+    <!-- Carregando Tailwind CSS para responsividade -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Variáveis de Cores (Paleta fornecida) */
+        :root {
+            /* Cores de Acento/Botão (Mantidas da Paleta Original) */
+            --primary-color: #12335A;
+            --secondary-color: #1A2847;
+            --button-border-color: #3F7996; 
+            --button-hover-bg: #3F7996;
+            --button-active-bg: #12335A;
+
+            /* Cores de Fundo/Texto do Usuário */
+            --cor-fundo: #0f0f1a;
+            --cor-fundo-secundario: #161622;
+            --cor-borda: rgba(255, 255, 255, 0.08); /* Borda suave */
+            --cor-texto: #eaeaea;
+            --cor-texto-secundario: #a0a0b0;
+
+            /* Mapeamento das classes globais para as novas cores */
+            --background-color: var(--cor-fundo); 
+            --text-color: var(--cor-texto); 
+            --white-color: var(--cor-texto); 
+            
+            /* Usando a cor de fundo secundária para os cards/botões */
+            --card-bg-color: var(--cor-fundo-secundario); 
+            --button-bg-color: var(--cor-fundo-secundario);
+
+            /* Cores de acento antigas que não foram substituídas */
+            --border-color: var(--cor-borda); 
+            --heading-color: var(--primary-color);
+        }
+
+        /* Classes de utilidade customizadas baseadas nas variáveis */
+        .bg-space { background-color: var(--background-color); }
+        .text-main { color: var(--text-color); }
+        .text-accent { color: var(--button-border-color); }
+        .border-accent { border-color: var(--button-border-color); }
+        
+        /* Estilo para os botões do menu (Cards) */
+        .menu-btn {
+            background-color: var(--button-bg-color);
+            color: var(--text-color);
+            border: 2px solid var(--cor-borda); 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-btn:hover {
+            background-color: var(--button-hover-bg);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 15px 25px -5px rgba(63, 121, 150, 0.4), 0 10px 10px -5px rgba(63, 121, 150, 0.2);
+            border-color: var(--white-color);
+        }
+
+        .menu-btn:active, .menu-btn.active {
+            background-color: var(--button-active-bg);
+            transform: translateY(0) scale(1.0);
+            box-shadow: none;
+            border-color: var(--button-border-color); /* Borda de destaque para o botão ativo */
+        }
+
+        /* Classe para o novo tamanho de fonte do título principal */
+        .h3-title {
+            font-size: 1.8rem;
+        }
+
+        /* Fundo Animado (GIF) */
+        .gif-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; 
+            background-image: url('https://art.ngfiles.com/images/2402000/2402867_vulpsvulps_space.gif?f1647212328');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Configuração de fonte */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cor-fundo); 
+        }
+
+        /* Estilo para os ícones SVG - usando a cor de destaque (accent) */
+        .icon-lg {
+            width: 40px; /* Reduzido para melhor encaixe na linha única */
+            height: 40px;
+            color: var(--button-border-color); 
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: color 0.3s;
+        }
+        .menu-btn:hover .icon-lg {
+            color: var(--white-color); 
+        }
+        
+        /* Novo estilo para sombra nos títulos de sub-área */
+        .text-shadow-strong {
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Estilo para garantir que as seções de conteúdo transicionem a opacidade */
+        .content-section {
+            /* Aplica a transição de opacidade */
+            transition: opacity 500ms ease-in-out;
+        }
+    </style>
+</head>
+<!-- h-screen para ocupar 100% da altura da viewport, p-4 para mobile -->
+<body class="h-screen flex flex-col items-center p-4 sm:p-12 bg-space overflow-y-auto">
+
+    <!-- Fundo de GIF Animado -->
+    <div class="gif-background"></div>
+
+    <!-- Conteúdo Principal -->
+    <div class="w-full max-w-5xl z-10"> 
+
+        <!-- Título do Menu -->
+        <header class="text-center mb-8 sm:mb-12 pt-8">
+            <h3 id="menu-title" class="h3-title font-bold text-main tracking-wider mb-2">
+                Selecione a Área para o Simulado
+            </h3>
+        </header>
+
+        <!-- Menu Principal: 4 Botões em Linha Única (Responsivo) -->
+        <main id="main-menu" class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full"> 
+
+            <!-- Botão: Matemática e suas Tecnologias -->
+            <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Matemática">
+                <!-- Ícone SVG de Gráfico de Linhas -->
+                <svg class="icon-lg mb-1" viewBox="0 0 24 24">
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    <polyline points="17 6 23 6 23 12"/>
+                </svg>
+                <div class="flex flex-col items-center flex-grow justify-center mt-2">
+                    <h2 class="text-xl font-bold text-main">Matemática e suas Tecnologias</h2>
+                    <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">Matemática.</p>
+                </div>
+            </a>
+
+            <!-- Botão: Linguagens e suas Tecnologias -->
+            <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Linguagens">
+                <!-- Ícone SVG de Pena -->
+                <svg class="icon-lg mb-1" viewBox="0 0 24 24">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 15.5L22 10c0 0 0 0-4-4l-5.5 5.5"/>
+                    <path d="M16 16L9.5 9.5"/>
+                    <path d="M11 10L3 2l5 5z"/>
+                </svg>
+                <div class="flex flex-col items-center flex-grow justify-center mt-2">
+                    <h2 class="text-xl font-bold text-main">Linguagens e suas Tecnologias</h2>
+                    <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">Português, Literatura, Língua Estrangeira, Artes, Ed. Física.</p>
+                </div>
+            </a>
+
+            <!-- Botão: Ciências Humanas e suas Tecnologias -->
+            <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Ciências Humanas">
+                <!-- Ícone SVG de Grupo de Pessoas -->
+                <svg class="icon-lg mb-1" viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                <div class="flex flex-col items-center flex-grow justify-center mt-2">
+                    <h2 class="text-xl font-bold text-main">Ciências Humanas e suas Tecnologias</h2>
+                    <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">História, Geografia, Filosofia, Sociologia.</p>
+                </div>
+            </a>
+
+            <!-- Botão: Ciências da Natureza e suas Tecnologias -->
+            <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Ciências da Natureza">
+                <!-- Ícone SVG de Tubo de Ensaio -->
+                <svg class="icon-lg mb-1" viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                <div class="flex flex-col items-center flex-grow justify-center mt-2">
+                    <h2 class="text-xl font-bold text-main">Ciências da Natureza e suas Tecnologias</h2>
+                    <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">Biologia, Química, Física.</p>
+                </div>
+            </a>
+
+        </main>
+        
+        <!-- Área de Conteúdo Dinâmico (Aparece ao clicar no menu principal) -->
+        <div id="area-content" class="w-full max-w-4xl mx-auto mt-12 mb-20 hidden p-4 sm:p-0">
+
+            <!-- Seção de Conteúdo: Ciências Humanas -->
+            <div id="humanas-content" class="content-section hidden opacity-0">
+                <div class="mb-8 pb-4 border-b border-white/10"></div>
+                <div class="grid grid-cols-1 gap-12">
+                    <!-- Sub-área: História -->
+                    <div class="mb-12"> 
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">História</h3>
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-orange-900 rounded-lg border-2 border-orange-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="História" data-topic="01"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-orange-900 rounded-lg border-2 border-orange-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="História" data-topic="02"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-orange-900 rounded-lg border-2 border-orange-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="História" data-topic="03"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-orange-900 rounded-lg border-2 border-orange-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="História" data-topic="04"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-orange-900 rounded-lg border-2 border-orange-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="História" data-topic="05"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span></a>
+                        </div>
+                    </div>
+                    <!-- Sub-área: Geografia -->
+                    <div class="mb-12"> 
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Geografia</h3>
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-amber-900 rounded-lg border-2 border-amber-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Geografia" data-topic="01"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-amber-900 rounded-lg border-2 border-amber-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Geografia" data-topic="02"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-amber-900 rounded-lg border-2 border-amber-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Geografia" data-topic="03"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-amber-900 rounded-lg border-2 border-amber-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Geografia" data-topic="04"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-amber-900 rounded-lg border-2 border-amber-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Geografia" data-topic="05"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span></a>
+                        </div>
+                    </div>
+                    <!-- Sub-área: Filosofia -->
+                    <div class="mb-12"> 
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Filosofia</h3>
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-yellow-900 rounded-lg border-2 border-yellow-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Filosofia" data-topic="01"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-yellow-900 rounded-lg border-2 border-yellow-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Filosofia" data-topic="02"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-yellow-900 rounded-lg border-2 border-yellow-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Filosofia" data-topic="03"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-yellow-900 rounded-lg border-2 border-yellow-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Filosofia" data-topic="04"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-yellow-900 rounded-lg border-2 border-yellow-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Filosofia" data-topic="05"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span></a>
+                        </div>
+                    </div>
+                    <!-- Sub-área: Sociologia -->
+                    <div class="mb-12"> 
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Sociologia</h3>
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-stone-900 rounded-lg border-2 border-stone-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Sociologia" data-topic="01"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-stone-900 rounded-lg border-2 border-stone-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Sociologia" data-topic="02"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-stone-900 rounded-lg border-2 border-stone-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Sociologia" data-topic="03"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-stone-900 rounded-lg border-2 border-stone-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Sociologia" data-topic="04"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-stone-900 rounded-lg border-2 border-stone-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Sociologia" data-topic="05"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção de Conteúdo: Ciências da Natureza -->
+            <!-- Adicionada classe de transição de opacidade -->
+            <div id="natureza-content" class="content-section hidden opacity-0">
+                <!-- Div para manter a linha e o espaçamento da seção -->
+                <div class="mb-8 pb-4 border-b border-white/10"></div>
+                
+                <!-- Grid para as 3 Sub-áreas (VERTICAL) -->
+                <div class="grid grid-cols-1 gap-12">
+
+                    <!-- Sub-área: Biologia -->
+                    <div class="mb-12"> 
+                        <!-- Título maior (text-4xl), branco, alinhado à esquerda com sombra -->
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Biologia</h3>
+                        <!-- Flex container para os slots, alinhamento à ESQUERDA (justify-start) -->
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots para imagens clicáveis (RETANGULAR MAIOR: w-36 h-52) -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-green-900 rounded-lg border-2 border-green-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Biologia" data-topic="01">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-green-900 rounded-lg border-2 border-green-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Biologia" data-topic="02">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-green-900 rounded-lg border-2 border-green-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Biologia" data-topic="03">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-green-900 rounded-lg border-2 border-green-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Biologia" data-topic="04">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-green-900 rounded-lg border-2 border-green-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Biologia" data-topic="05">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Sub-área: Química -->
+                    <div class="mb-12">
+                         <!-- Título maior (text-4xl), branco, alinhado à esquerda com sombra -->
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Química</h3>
+                        <!-- Flex container para os slots, alinhamento à ESQUERDA (justify-start) -->
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots para imagens clicáveis (RETANGULAR MAIOR: w-36 h-52) -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-red-900 rounded-lg border-2 border-red-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Química" data-topic="01">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-red-900 rounded-lg border-2 border-red-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Química" data-topic="02">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-red-900 rounded-lg border-2 border-red-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Química" data-topic="03">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-red-900 rounded-lg border-2 border-red-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Química" data-topic="04">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-red-900 rounded-lg border-2 border-red-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Química" data-topic="05">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Sub-área: Física -->
+                    <div class="mb-12">
+                        <!-- Título maior (text-4xl), branco, alinhado à esquerda com sombra -->
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Física</h3>
+                        <!-- Flex container para os slots, alinhamento à ESQUERDA (justify-start) -->
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots para imagens clicáveis (RETANGULAR MAIOR: w-36 h-52) -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-blue-900 rounded-lg border-2 border-blue-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Física" data-topic="01">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-blue-900 rounded-lg border-2 border-blue-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Física" data-topic="02">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-blue-900 rounded-lg border-2 border-blue-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Física" data-topic="03">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-blue-900 rounded-lg border-2 border-blue-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Física" data-topic="04">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span>
+                            </a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-blue-900 rounded-lg border-2 border-blue-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Física" data-topic="05">
+                                <span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção de Conteúdo: Linguagens -->
+            <div id="linguagens-content" class="content-section hidden opacity-0">
+                <div class="mb-8 pb-4 border-b border-white/10"></div>
+                <div class="grid grid-cols-1 gap-12">
+                    <!-- Sub-área: Língua Portuguesa -->
+                    <div class="mb-12"> 
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Língua Portuguesa</h3>
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-pink-900 rounded-lg border-2 border-pink-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Língua Portuguesa" data-topic="01"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-pink-900 rounded-lg border-2 border-pink-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Língua Portuguesa" data-topic="02"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-pink-900 rounded-lg border-2 border-pink-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Língua Portuguesa" data-topic="03"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-pink-900 rounded-lg border-2 border-pink-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Língua Portuguesa" data-topic="04"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-pink-900 rounded-lg border-2 border-pink-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Língua Portuguesa" data-topic="05"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span></a>
+                        </div>
+                    </div>
+                    <!-- Sub-área: Literatura -->
+                    <div class="mb-12"> 
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Literatura</h3>
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-purple-900 rounded-lg border-2 border-purple-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Literatura" data-topic="01"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-purple-900 rounded-lg border-2 border-purple-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Literatura" data-topic="02"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-purple-900 rounded-lg border-2 border-purple-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Literatura" data-topic="03"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-purple-900 rounded-lg border-2 border-purple-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Literatura" data-topic="04"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-purple-900 rounded-lg border-2 border-purple-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Literatura" data-topic="05"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span></a>
+                        </div>
+                    </div>
+                    <!-- Sub-área: Língua Estrangeira -->
+                    <div class="mb-12"> 
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Língua Estrangeira</h3>
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-indigo-900 rounded-lg border-2 border-indigo-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Língua Estrangeira" data-topic="01"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-indigo-900 rounded-lg border-2 border-indigo-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Língua Estrangeira" data-topic="02"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-indigo-900 rounded-lg border-2 border-indigo-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Língua Estrangeira" data-topic="03"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-indigo-900 rounded-lg border-2 border-indigo-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Língua Estrangeira" data-topic="04"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-indigo-900 rounded-lg border-2 border-indigo-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Língua Estrangeira" data-topic="05"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span></a>
+                        </div>
+                    </div>
+                    <!-- Sub-área: Artes -->
+                    <div class="mb-12"> 
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Artes</h3>
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-gray-700 rounded-lg border-2 border-gray-400 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Artes" data-topic="01"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-gray-700 rounded-lg border-2 border-gray-400 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Artes" data-topic="02"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-gray-700 rounded-lg border-2 border-gray-400 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Artes" data-topic="03"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-gray-700 rounded-lg border-2 border-gray-400 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Artes" data-topic="04"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-gray-700 rounded-lg border-2 border-gray-400 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Artes" data-topic="05"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span></a>
+                        </div>
+                    </div>
+                    <!-- Sub-área: Educação Física -->
+                    <div class="mb-12"> 
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Educação Física</h3>
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots -->
+                            <a href="#" class="image-slot group w-36 h-52 bg-teal-900 rounded-lg border-2 border-teal-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Educação Física" data-topic="01"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-01</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-teal-900 rounded-lg border-2 border-teal-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Educação Física" data-topic="02"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-02</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-teal-900 rounded-lg border-2 border-teal-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Educação Física" data-topic="03"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-03</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-teal-900 rounded-lg border-2 border-teal-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Educação Física" data-topic="04"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-04</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-teal-900 rounded-lg border-2 border-teal-500 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Educação Física" data-topic="05"><span class="text-white font-bold text-xl group-hover:text-yellow-300">T-05</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção de Conteúdo: Matemática -->
+            <div id="matematica-content" class="content-section hidden opacity-0">
+                <div class="mb-8 pb-4 border-b border-white/10"></div>
+                <div class="grid grid-cols-1 gap-12">
+                    <!-- Sub-área: Matemática (única sub-área) -->
+                    <div class="mb-12"> 
+                        <h3 class="text-4xl font-bold text-white mb-6 text-left text-shadow-strong">Matemática</h3>
+                        <div class="flex flex-wrap justify-start gap-6">
+                            <!-- 5 slots -->
+                            <a href="" class="image-slot group w-36 h-52 bg-yellow-600 rounded-lg border-2 border-yellow-300 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Matemática" data-topic="01"><span class="text-white font-bold text-xl group-hover:text-gray-900">T-01</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-yellow-600 rounded-lg border-2 border-yellow-300 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Matemática" data-topic="02"><span class="text-white font-bold text-xl group-hover:text-gray-900">T-02</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-yellow-600 rounded-lg border-2 border-yellow-300 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Matemática" data-topic="03"><span class="text-white font-bold text-xl group-hover:text-gray-900">T-03</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-yellow-600 rounded-lg border-2 border-yellow-300 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Matemática" data-topic="04"><span class="text-white font-bold text-xl group-hover:text-gray-900">T-04</span></a>
+                            <a href="#" class="image-slot group w-36 h-52 bg-yellow-600 rounded-lg border-2 border-yellow-300 flex items-center justify-center hover:scale-105 transition duration-300 shadow-xl" data-sub-area="Matemática" data-topic="05"><span class="text-white font-bold text-xl group-hover:text-gray-900">T-05</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainButtons = document.querySelectorAll('#main-menu a');
+            const areaContentContainer = document.getElementById('area-content');
+            const contentSections = document.querySelectorAll('.content-section');
+            // Re-seleciona todos os slots de imagem, incluindo os novos
+            const imageSlots = document.querySelectorAll('.image-slot'); 
+
+            // Mapeamento de área para ID de conteúdo
+            const contentMap = {
+                // Os data-area continuam com o nome da área, não o nome completo (para manter a lógica de mapeamento)
+                'Matemática': 'matematica-content',
+                'Linguagens': 'linguagens-content',
+                'Ciências Humanas': 'humanas-content',
+                'Ciências da Natureza': 'natureza-content'
+            };
+
+            // Adiciona a classe de transição inicial a todas as seções
+            contentSections.forEach(section => {
+                section.classList.add('transition-opacity', 'duration-500', 'opacity-0');
+            });
+
+
+            // Função para esconder todos os conteúdos e remover o estado 'active'
+            function hideAllContent() {
+                // Inicia o fade out de todos os conteúdos ativos
+                contentSections.forEach(section => {
+                    if (!section.classList.contains('hidden')) {
+                        // Inicia a transição de opacidade para 0
+                        section.classList.remove('opacity-100');
+                        section.classList.add('opacity-0');
+
+                        // Após a transição (500ms), esconde totalmente
+                        // Usamos setTimeout para permitir que a transição CSS ocorra
+                        setTimeout(() => {
+                            section.classList.add('hidden');
+                        }, 500);
+                    }
+                });
+                mainButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // O container principal pode ser escondido imediatamente para gerenciar o espaço vertical
+                areaContentContainer.classList.add('hidden');
+            }
+
+            // Ouvinte para os botões do menu principal
+            mainButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault(); 
+
+                    const areaName = e.currentTarget.getAttribute('data-area');
+                    const targetContentId = contentMap[areaName];
+
+                    // Esconde todos os conteúdos existentes com fade out
+                    hideAllContent(); 
+                    
+                    if (targetContentId) {
+                        const targetContent = document.getElementById(targetContentId);
+                        
+                        // Adiciona a classe 'active' ao botão clicado
+                        e.currentTarget.classList.add('active');
+
+                        // Mostra o container principal (seção de sub-área)
+                        areaContentContainer.classList.remove('hidden');
+
+                        // Mostra a seção de conteúdo específica com fade in
+                        if (targetContent) {
+                            // Remove 'hidden' para que o elemento comece a ocupar espaço no layout
+                            targetContent.classList.remove('hidden'); 
+                            
+                            // Força um reflow síncrono para garantir que o navegador 
+                            // reconheça o estado inicial (opacity-0) antes de aplicar o opacity-100
+                            void targetContent.offsetWidth; 
+
+                            // Inicia o fade in
+                            targetContent.classList.remove('opacity-0');
+                            targetContent.classList.add('opacity-100');
+                        }
+                    } else {
+                        // Se a área não tem conteúdo mapeado, esconde o container principal
+                        areaContentContainer.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Ouvinte para os slots de imagem (para confirmar que são clicáveis)
+            imageSlots.forEach(slot => {
+                slot.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const subArea = e.currentTarget.getAttribute('data-sub-area');
+                    const topic = e.currentTarget.getAttribute('data-topic');
+                    // Substitua o console.log por uma função real de carregamento de questões
+                    console.log(`Simulado Selecionado: ${subArea} - Tema ${topic}. Implemente o carregamento da questão aqui.`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
