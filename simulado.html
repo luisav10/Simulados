@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado - Área Selecionada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Variáveis de Cores Reutilizadas do index.html --- */
+        :root {
+            --primary-color: #12335A;
+            --secondary-color: #1A2847;
+            --button-border-color: #3F7996; 
+            --button-hover-bg: #3F7996;
+            --button-active-bg: #12335A;
+            --cor-fundo: #0f0f1a;
+            --cor-fundo-secundario: #161622;
+            --cor-borda: rgba(255, 255, 255, 0.08); 
+            --cor-texto: #eaeaea;
+            --cor-texto-secundario: #a0a0b0;
+            --background-color: var(--cor-fundo); 
+            --text-color: var(--cor-texto); 
+            --card-bg-color: var(--cor-fundo-secundario); 
+        }
+
+        /* Estilos Globais e Fundo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cor-fundo); 
+        }
+        .bg-space { background-color: var(--background-color); }
+        .text-main { color: var(--text-color); }
+        
+        /* Fundo Animado (GIF) */
+        .gif-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-image: url('https://art.ngfiles.com/images/2402000/2402867_vulpsvulps_space.gif?f1647212328');
+            filter: brightness(0.25) opacity(0.75);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* --- Estilo da Barra de Progresso --- */
+        #progress-bar {
+            /* Cor de destaque para o progresso */
+            background-color: var(--button-border-color); 
+            transition: width 0.4s ease-in-out;
+        }
+
+        /* --- Estilo do Card Principal da Questão --- */
+        .question-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--cor-borda); 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            /* Transição sutil no card, caso mude de estado */
+            transition: all 0.5s;
+        }
+
+        /* --- Estilo para os Botões de Alternativa (Responsivo) --- */
+        .alternative-btn {
+            background-color: var(--secondary-color);
+            border: 2px solid var(--cor-borda);
+            color: var(--text-color);
+            text-align: left;
+            transition: all 0.2s;
+            line-height: 1.4; /* Melhora a leitura do texto */
+        }
+        
+        /* Efeito de Hover */
+        .alternative-btn:hover {
+            border-color: var(--button-border-color); /* Borda de destaque no hover */
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Estado Selecionado (Clique) */
+        .alternative-btn.selected {
+            border-color: #fca311; /* Cor de seleção */
+            background-color: #1a2847; 
+            transform: none;
+        }
+
+        /* Estado Correto (Pós-resposta) */
+        .alternative-btn.correct {
+            border-color: #28a745; /* Verde para correto */
+            background-color: rgba(40, 167, 69, 0.2); 
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+        }
+        
+        /* Estado Incorreto (Pós-resposta) */
+        .alternative-btn.incorrect {
+            border-color: #dc3545; /* Vermelho para incorreto */
+            background-color: rgba(220, 53, 69, 0.2); 
+        }
+
+        /* --- Estilo da Área de Imagem da Questão --- */
+        #question-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            border: 1px solid var(--cor-borda);
+            background-color: var(--cor-fundo);
+            object-fit: contain; /* Garante que a imagem se ajuste */
+        }
+
+        /* --- Estilo da Área de Resultados --- */
+        .result-box {
+            background-color: var(--secondary-color);
+            border: 2px solid var(--button-border-color);
+            padding: 1.5rem;
+        }
+
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4 sm:p-12 bg-space overflow-y-auto">
+
+    <div class="gif-background"></div>
+
+    <div class="w-full max-w-4xl z-10"> 
+
+        <header class="text-center mb-8 sm:mb-10 pt-4">
+            <h1 id="quiz-title" class="text-3xl font-bold text-main tracking-wider mb-4">
+                Carregando Simulado...
+            </h1>
+            
+            <div id="progress-bar-container" class="w-full h-2 bg-gray-700 rounded-full overflow-hidden shadow-inner">
+                <div id="progress-bar" class="h-full" style="width: 0%;"></div>
+            </div>
+            <p id="progress-text" class="text-xs text-right mt-1" style="color: var(--cor-texto-secundario);">Questão 0 de 0</p>
+        </header>
+
+        <main id="question-area" class="question-card rounded-xl p-6 sm:p-8 mb-12">
+            
+            <div class="flex justify-between items-start mb-4 pb-2 border-b border-white/10">
+                <h2 id="question-number" class="text-xl font-bold text-accent">Questão 1/10</h2>
+                <span id="current-topic" class="text-sm font-semibold" style="color: var(--cor-texto-secundario);">Tópico: Enem 2021</span>
+            </div>
+
+            <section class="mb-6">
+                <div id="question-content" class="text-lg text-main leading-relaxed mb-4">
+                    <p>Aqui virá o enunciado completo da questão, com o texto base e o comando. Este é o layout padrão de todas as questões.</p>
+                </div>
+                
+                <div id="question-image" class="w-full mx-auto max-w-xl my-4">
+                    <img src="https://via.placeholder.com/600x300?text=Espaço+para+Imagem+da+Questão" alt="Gráfico ou texto de apoio à questão" class="shadow-lg">
+                </div>
+            </section>
+            
+            <section id="alternatives" class="grid grid-cols-1 gap-4">
+                <button class="alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none" data-value="A">
+                    <span class="font-bold text-accent mr-3">A)</span> 
+                    Alternativa A: O texto da alternativa será carregado aqui.
+                </button>
+                <button class="alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none" data-value="B">
+                    <span class="font-bold text-accent mr-3">B)</span> 
+                    Alternativa B: O texto da alternativa será carregado aqui.
+                </button>
+                <button class="alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none" data-value="C">
+                    <span class="font-bold text-accent mr-3">C)</span> 
+                    Alternativa C: O texto da alternativa será carregado aqui.
+                </button>
+                <button class="alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none" data-value="D">
+                    <span class="font-bold text-accent mr-3">D)</span> 
+                    Alternativa D: O texto da alternativa será carregado aqui.
+                </button>
+                <button class="alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none" data-value="E">
+                    <span class="font-bold text-accent mr-3">E)</span> 
+                    Alternativa E: O texto da alternativa será carregado aqui.
+                </button>
+            </section>
+            
+            <div class="flex justify-end mt-8 pt-4 border-t border-white/10">
+                <button id="next-question-btn" class="bg-button-border-color text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-button-active-bg" style="background-color: var(--button-border-color);">
+                    Próxima Questão
+                </button>
+            </div>
+            
+        </main>
+
+
+        <section id="result-area" class="hidden my-12 transition-opacity duration-700 opacity-0">
+            <h2 class="text-4xl font-extrabold text-main text-center mb-6" style="color: var(--button-border-color);">Simulado Finalizado! 🥳</h2>
+            
+            <div class="result-box rounded-xl text-center shadow-2xl p-6 sm:p-10">
+                <p class="text-xl text-white mb-4">Sua Performance em <span id="final-area-title" class="font-bold"></span>:</p>
+                <div class="text-5xl font-extrabold mb-8 text-green-400">
+                    <span id="final-score">X</span> de <span id="total-questions">Y</span> Acertos
+                </div>
+                
+                <p class="text-lg" style="color: var(--cor-texto-secundario);">Parabéns! Reveja os detalhes abaixo para aprender com seus erros.</p>
+                
+                <button id="view-resolution-btn" class="mt-8 bg-gray-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-gray-700">
+                    Ver Resolução Completa
+                </button>
+            </div>
+            
+            <div id="resolution-details" class="mt-10 hidden">
+                <h3 class="text-3xl font-bold text-main mb-6 border-b border-white/10 pb-2">Detalhes e Resolução</h3>
+                </div>
+        </section>
+
+    </div>
+
+<script>
+        // ESTADO GLOBAL DO QUIZ
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let quizData = []; 
+        let subAreaName = "Área"; 
+        
+        // Mapeamento de áreas (para buscar no JSON)
+        const areaMap = {
+            'Matemática': 'Matemática', // Área Principal: Sub-área:
+            'Língua Portuguesa': 'Linguagens',
+            'Literatura': 'Linguagens',
+            'Língua Estrangeira': 'Linguagens',
+            'Artes': 'Linguagens',
+            'Educação Física': 'Linguagens',
+            'História': 'Ciências Humanas',
+            'Geografia': 'Ciências Humanas',
+            'Filosofia': 'Ciências Humanas',
+            'Sociologia': 'Ciências Humanas',
+            'Biologia': 'Ciências da Natureza',
+            'Química': 'Ciências da Natureza',
+            'Física': 'Ciências da Natureza'
+        };
+
+        // Função para ler os parâmetros da URL
+        function getUrlParameters() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                subarea: params.get('subarea'),
+                topic: params.get('topic')
+            };
+        }
+
+        // Função para buscar os dados no arquivo JSON
+        async function fetchQuizData(subarea, topic) {
+            const areaPrincipal = areaMap[subarea];
+            
+            if (!areaPrincipal) {
+                console.error(`Área principal não mapeada para a sub-área: ${subarea}`);
+                return [];
+            }
+
+            try {
+                // Tenta buscar o arquivo questoes.json (deve estar na mesma pasta)
+                const response = await fetch('questoes.json');
+                
+                if (!response.ok) {
+                    throw new Error(`Erro ${response.status} ao carregar o arquivo questoes.json. Verifique se o arquivo existe.`);
+                }
+                
+                const data = await response.json();
+
+                // Busca as questões específicas usando a hierarquia: [Área Principal] -> [Sub-área] -> [Tópico]
+                if (data[areaPrincipal] && data[areaPrincipal][subarea] && data[areaPrincipal][subarea][topic]) {
+                    return data[areaPrincipal][subarea][topic]; // Retorna a lista de questões
+                } else {
+                    console.warn(`Tópico ou sub-área não encontrada no JSON: ${areaPrincipal} > ${subarea} > ${topic}`);
+                    return [];
+                }
+
+            } catch (error) {
+                console.error('Erro ao buscar ou processar os dados do quiz:', error);
+                document.getElementById('question-content').innerHTML = `<p class='text-red-400'>Não foi possível carregar os dados do simulado. Verifique o arquivo questoes.json.</p>`;
+                return [];
+            }
+        }
+
+
+        // Função principal de inicialização
+        async function initializeQuiz() {
+            const { subarea, topic } = getUrlParameters();
+            
+            if (!subarea || !topic) {
+                document.getElementById('quiz-title').textContent = "Erro: Simulado não encontrado.";
+                return;
+            }
+
+            subAreaName = subarea; // Armazena o nome da sub-área
+            
+            document.getElementById('quiz-title').textContent = `Simulado de ${subarea} - Tópico ${topic}`;
+            document.getElementById('current-topic').textContent = `Tópico: ${topic}`;
+
+            // *** CHAMADA DE DADOS REAL ***
+            quizData = await fetchQuizData(subarea, topic);
+            
+            // Inicia o quiz com a primeira questão
+            if (quizData.length > 0) {
+                loadQuestion(0);
+                updateProgress();
+            } else {
+                document.getElementById('quiz-title').textContent = `Simulado de ${subarea} - SEM QUESTÕES`;
+                document.getElementById('question-content').innerHTML = "<p class='text-red-400'>Nenhuma questão encontrada para este tópico. Verifique se o arquivo 'questoes.json' foi preenchido corretamente.</p>";
+            }
+        }
+
+        // Função para carregar uma questão específica
+        function loadQuestion(index) {
+            const question = quizData[index];
+            if (!question) return;
+
+            // 1. Atualiza o número da questão e progresso
+            document.getElementById('question-number').textContent = `Questão ${index + 1}/${quizData.length}`;
+            
+            // 2. Preenche o enunciado
+            const questionContentDiv = document.getElementById('question-content');
+            questionContentDiv.innerHTML = `<p>${question.enunciado}</p>`;
+            
+            // 3. Preenche a imagem (se houver)
+            const questionImageDiv = document.getElementById('question-image');
+            questionImageDiv.innerHTML = ''; 
+            if (question.imagem_url) {
+                questionImageDiv.innerHTML = `<img src="${question.imagem_url}" alt="Gráfico ou texto de apoio à questão" class="shadow-lg">`;
+            }
+
+
+            // 4. Preenche as alternativas
+            const alternativesContainer = document.getElementById('alternatives');
+            alternativesContainer.innerHTML = ''; 
+            const letters = ['A', 'B', 'C', 'D', 'E'];
+            let i = 0;
+
+            // Itera sobre o objeto de alternativas do JSON
+            for (const letter of letters) {
+                const text = question.alternativas[letter];
+                if (text) { // Garante que só renderiza se a alternativa existir
+                    const btn = document.createElement('button');
+                    btn.className = 'alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none';
+                    btn.setAttribute('data-value', letter);
+                    btn.innerHTML = `<span class="font-bold text-accent mr-3">${letter})</span> ${text}`;
+                    
+                    btn.addEventListener('click', () => selectAlternative(btn, index));
+                    alternativesContainer.appendChild(btn);
+                }
+                i++;
+            }
+            
+
+            // 5. Reativa o botão "Próxima Questão" e o nomeia corretamente
+            const nextBtn = document.getElementById('next-question-btn');
+            if (index === quizData.length - 1) {
+                nextBtn.textContent = "Finalizar Simulado";
+            } else {
+                nextBtn.textContent = "Próxima Questão";
+            }
+            // Verifica se o usuário já respondeu a questão atual para reabilitar o botão
+            nextBtn.disabled = !userAnswers[index]; 
+
+            // Se for uma questão que já foi respondida, aplica a classe 'selected'
+            if (userAnswers[index]) {
+                const selectedLetter = userAnswers[index];
+                const selectedButton = alternativesContainer.querySelector(`[data-value="${selectedLetter}"]`);
+                if (selectedButton) {
+                    selectedButton.classList.add('selected');
+                }
+            }
+        }
+        
+        // Função para selecionar uma alternativa
+        function selectAlternative(selectedBtn, questionIndex) {
+            const container = selectedBtn.closest('#alternatives');
+            const allBtns = container.querySelectorAll('.alternative-btn');
+            const nextBtn = document.getElementById('next-question-btn');
+
+            // 1. Remove a seleção de todos e aplica no selecionado
+            allBtns.forEach(btn => btn.classList.remove('selected'));
+            selectedBtn.classList.add('selected');
+            
+            // 2. Registra a resposta do usuário
+            userAnswers[questionIndex] = selectedBtn.getAttribute('data-value');
+
+            // 3. Habilita o botão de navegação
+            nextBtn.disabled = false;
+        }
+
+        // Função para avançar/finalizar
+        document.getElementById('next-question-btn').addEventListener('click', () => {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+                updateProgress();
+            } else {
+                // Última questão, finalizar o simulado
+                showResults();
+            }
+        });
+
+        // Função para atualizar a barra de progresso
+        function updateProgress() {
+            const total = quizData.length;
+            const completed = currentQuestionIndex + 1;
+            const percentage = (completed / total) * 100;
+
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-text').textContent = `Questão ${completed} de ${total}`;
+        }
+
+        // Função para mostrar a tela de resultados
+        function showResults() {
+            // 1. Esconde a área de questões e mostra a de resultados
+            document.getElementById('question-area').classList.add('hidden');
+            const resultArea = document.getElementById('result-area');
+            resultArea.classList.remove('hidden');
+            
+            // Força o reflow para a transição de opacidade
+            void resultArea.offsetWidth; 
+            resultArea.classList.add('opacity-100');
+            resultArea.classList.remove('opacity-0');
+            
+            // 2. Calcula e exibe o score
+            let correctCount = 0;
+
+            quizData.forEach((q, index) => {
+                // A resposta correta no JSON é uma letra
+                if (userAnswers[index] === q.resposta_correta) {
+                    correctCount++;
+                }
+            });
+
+            document.getElementById('final-area-title').textContent = subAreaName;
+            document.getElementById('final-score').textContent = correctCount;
+            document.getElementById('total-questions').textContent = quizData.length;
+            
+            // Oculta a barra de progresso após o quiz
+            document.getElementById('progress-bar-container').classList.add('hidden');
+            document.getElementById('progress-text').classList.add('hidden');
+        }
+
+        // Função para mostrar a resolução
+        document.getElementById('view-resolution-btn').addEventListener('click', () => {
+            const resolutionDetails = document.getElementById('resolution-details');
+            resolutionDetails.classList.remove('hidden');
+            
+            // Injeta os detalhes da resolução
+            const htmlResolutions = quizData.map((q, index) => {
+                const userAnswer = userAnswers[index];
+                const correctAnswerLetter = q.resposta_correta;
+                const isCorrect = (userAnswer === correctAnswerLetter);
+                const userAnswerText = q.alternativas[userAnswer] || "Não respondida";
+                const correctAnswerText = q.alternativas[correctAnswerLetter];
+
+                // Adiciona a imagem se houver
+                const imageHtml = q.imagem_url ? `<div class="w-full max-w-xl mx-auto my-4"><img src="${q.imagem_url}" alt="Imagem da Questão" class="rounded-lg border border-white/10"></div>` : '';
+                
+                return `
+                    <div class="p-6 my-4 rounded-xl border-l-4 ${isCorrect ? 'border-green-500' : 'border-red-500'}" style="background-color: var(--secondary-color);">
+                        <h4 class="text-xl font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'} mb-2">Questão ${index + 1}: ${isCorrect ? 'ACERTOU!' : 'ERROU.'}</h4>
+                        <p class="text-main mb-2">${q.enunciado}</p>
+                        ${imageHtml}
+                        
+                        <p class="text-sm" style="color: var(--cor-texto-secundario);">Sua resposta: <span class="font-bold">${userAnswer || '-'} (${userAnswerText})</span></p>
+                        <p class="text-sm text-green-400 mb-4">Resposta Correta: <span class="font-bold">${correctAnswerLetter} (${correctAnswerText})</span></p>
+                        <div class="p-3 rounded bg-gray-800 text-sm" style="color: var(--cor-texto-secundario);">
+                            <span class="font-bold text-accent">Resolução:</span> ${q.resolucao}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            resolutionDetails.innerHTML = `<h3 class="text-3xl font-bold text-main mb-6 border-b border-white/10 pb-2">Detalhes e Resolução</h3>` + htmlResolutions;
+
+        });
+
+        // Inicia o quiz ao carregar a página
+        document.addEventListener('DOMContentLoaded', initializeQuiz);
+    </script>
+</body>
+</html>
