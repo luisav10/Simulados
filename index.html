@@ -120,16 +120,12 @@
             transition: opacity 500ms ease-in-out;
         }
 
-        /* --- Alterações Solicitadas --- */
+        /* --- Estilos para os Slots de Imagem --- */
         
-        /* 1. Novo tamanho para os slots de imagem e sombra (sem bordas) */
         .image-slot {
-            /* Aumentando o tamanho dos slots: de w-36 h-52 para w-40 h-56 */
             width: 10rem;  /* 160px (Tailwind w-40) */
             height: 14rem; /* 224px (Tailwind h-56) */
-            /* Adicionando uma sombra mais proeminente e colorida no hover */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Sombra inicial mais escura */
-            /* Borda removida do CSS, e classes de borda removidas do HTML */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); 
         }
         
         .image-slot:hover {
@@ -137,81 +133,183 @@
             box-shadow: 0 10px 20px -5px rgba(63, 121, 150, 0.6), 0 5px 10px -5px rgba(0, 0, 0, 0.5);
         }
 
-        /* 2. Diminuir o tamanho da fonte do título principal do menu-btn (h2) */
         .menu-btn h2 {
-            /* Diminuído mais um pouco, de 1.125rem para 1rem (text-base do Tailwind) para maior harmonia */
             font-size: 1rem; 
-            line-height: 1.3; /* Ajuste a linha para melhor visualização com fonte menor */
+            line-height: 1.3; 
+        }
+
+        /* --- Estilos para a Navbar --- */
+        .navbar-top {
+            /* ALTERADO: Removido position: fixed para que ela role com o conteúdo */
+            width: 100%;
+            background-color: transparent; 
+            z-index: 10; 
+            box-shadow: none; 
+        }
+
+        .navbar-content {
+            width: 100%; /* Usa a largura total do pai */
+            padding: 1rem; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between; 
+        }
+
+        /* Estilo para o HR: Cor branca (white-color) conforme solicitação */
+        .navbar-hr {
+            border: none; 
+            border-top: 2px solid var(--white-color); /* Alterado para white-color */
+            margin: 0; 
+            width: 100%;
+        }
+        
+        /* REMOVIDO: .content-padding não é mais necessário, pois a navbar não é fixa. */
+        /* .content-padding { padding-top: 5rem; }  */
+        
+        /* --- NOVO: Estilos para a Animação do Menu --- */
+        
+        /* Classe de layout do wrapper que será animado. */
+        #menu-animation-area {
+            /* Transição para todas as mudanças de layout (flex-grow, justify-content) */
+            transition: all 0.7s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        /* Estado Inicial: Ocupa o espaço restante e centraliza o menu verticalmente. */
+        .menu-state-centered {
+            flex-grow: 1; /* Ocupa todo o espaço vertical disponível no container pai */
+            justify-content: center; /* Centraliza o conteúdo (header + main) verticalmente */
+            align-items: center; /* Centraliza horizontalmente o conteúdo do menu */
+        }
+
+        /* Estado Final: Colapsa para o topo, ocupando apenas o espaço necessário. */
+        .menu-state-top {
+            flex-grow: 0; /* Colapsa para o tamanho do conteúdo */
+            /* Garante que o conteúdo vá para o topo, já que o flex-grow não o está forçando */
+            justify-content: flex-start;
+            /* Remove a centralização horizontal, permitindo que os elementos internos se alinhem por si mesmos (ex: mx-auto) */
+            align-items: initial;
+        }
+
+        /* Ajuste para o header e main-menu ficarem alinhados quando no estado final */
+        #main-menu {
+            /* Garante que o grid do menu principal permaneça centralizado horizontalmente */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #menu-animation-area.menu-state-top #menu-header {
+             /* Garante que o título "Selecione a Área..." volte a ocupar a largura total no topo */
+            width: 100%; 
+            padding-top: 1rem; /* Um pouco de padding no topo para respirar */
         }
         
     </style>
 </head>
-<body class="h-screen flex flex-col items-center p-4 sm:p-12 bg-space overflow-y-auto">
+<body class="h-screen flex flex-col items-center bg-space overflow-y-auto">
+    <nav class="navbar-top">
+        <div class="navbar-content">
+            
+            <div class="flex items-center space-x-2"> 
+                
+                <a href="#" class="text-white hover:text-accent transition duration-200">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </a>
 
+                <h1 class="text-xl font-bold text-main tracking-wider uppercase">
+                    Simulados
+                </h1>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <a href="acompanhamento.html" class="text-white hover:text-accent transition duration-200" title="Acompanhamento">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+                
+                <div id="logo-placeholder" class="w-16 h-6 bg-transparent flex items-center justify-end">
+                    <span class="text-xs text-accent font-semibold hidden sm:inline"><img src="img/logo final.png" alt=""></span> 
+                </div>
+            </div>
+
+        </div>
+
+        <hr class="navbar-hr"/>
+    </nav>
     <div class="gif-background"></div>
 
-    <div class="w-full max-w-5xl z-10"> 
+    <div class="w-full max-w-5xl z-10 flex flex-col flex-grow"> 
 
-        <header class="text-center mb-8 sm:mb-12 pt-8">
-            <h3 id="menu-title" class="h3-title font-bold text-main tracking-wider mb-2">
-                Selecione a Área para o Simulado
-            </h3>
-        </header>
+        <div id="menu-animation-area" class="menu-state-centered">
+            
+            <header id="menu-header" class="text-center mb-8 sm:mb-12">
+                <h3 id="menu-title" class="h3-title font-bold text-main tracking-wider mb-2">
+                    Selecione a Área para o Simulado
+                </h3>
+                <p class="text-sm text-center" style="color: var(--cor-texto-secundario);">
+                    Escolha uma das grandes áreas do conhecimento abaixo para começar seu estudo.
+                </p>
+                </header>
 
-        <main id="main-menu" class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full"> 
+            <main id="main-menu" class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full"> 
+                <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Matemática">
+                    <svg class="icon-lg mb-1" viewBox="0 0 24 24">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        <polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                    <div class="flex flex-col items-center flex-grow justify-center mt-2">
+                        <h2 class="font-bold text-main">Matemática e suas Tecnologias</h2>
+                        <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">Matemática.</p>
+                    </div>
+                </a>
 
-            <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Matemática">
-                <svg class="icon-lg mb-1" viewBox="0 0 24 24">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                    <polyline points="17 6 23 6 23 12"/>
-                </svg>
-                <div class="flex flex-col items-center flex-grow justify-center mt-2">
-                    <h2 class="font-bold text-main">Matemática e suas Tecnologias</h2>
-                    <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">Matemática.</p>
-                </div>
-            </a>
+                <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Linguagens">
+                    <svg class="icon-lg mb-1" viewBox="0 0 24 24">
+                        <path d="M12 20h9"/>
+                        <path d="M16.5 15.5L22 10c0 0 0 0-4-4l-5.5 5.5"/>
+                        <path d="M16 16L9.5 9.5"/>
+                        <path d="M11 10L3 2l5 5z"/>
+                    </svg>
+                    <div class="flex flex-col items-center flex-grow justify-center mt-2">
+                        <h2 class="font-bold text-main">Linguagens e suas Tecnologias</h2>
+                        <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">Português, Literatura, Língua Estrangeira, Artes, Ed. Física.</p>
+                    </div>
+                </a>
 
-            <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Linguagens">
-                <svg class="icon-lg mb-1" viewBox="0 0 24 24">
-                    <path d="M12 20h9"/>
-                    <path d="M16.5 15.5L22 10c0 0 0 0-4-4l-5.5 5.5"/>
-                    <path d="M16 16L9.5 9.5"/>
-                    <path d="M11 10L3 2l5 5z"/>
-                </svg>
-                <div class="flex flex-col items-center flex-grow justify-center mt-2">
-                    <h2 class="font-bold text-main">Linguagens e suas Tecnologias</h2>
-                    <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">Português, Literatura, Língua Estrangeira, Artes, Ed. Física.</p>
-                </div>
-            </a>
+                <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Ciências Humanas">
+                    <svg class="icon-lg mb-1" viewBox="0 0 24 24">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <div class="flex flex-col items-center flex-grow justify-center mt-2">
+                        <h2 class="font-bold text-main">Ciências Humanas e suas Tecnologias</h2>
+                        <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">História, Geografia, Filosofia, Sociologia.</p>
+                    </div>
+                </a>
 
-            <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Ciências Humanas">
-                <svg class="icon-lg mb-1" viewBox="0 0 24 24">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-                <div class="flex flex-col items-center flex-grow justify-center mt-2">
-                    <h2 class="font-bold text-main">Ciências Humanas e suas Tecnologias</h2>
-                    <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">História, Geografia, Filosofia, Sociologia.</p>
-                </div>
-            </a>
+                <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Ciências da Natureza">
+                    <svg class="icon-lg mb-1" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                    <div class="flex flex-col items-center flex-grow justify-center mt-2">
+                        <h2 class="font-bold text-main">Ciências da Natureza e suas Tecnologias</h2>
+                        <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">Biologia, Química, Física.</p>
+                    </div>
+                </a>
+            </main>
 
-            <a href="#" class="menu-btn rounded-xl p-4 flex flex-col items-center justify-start text-center shadow-lg hover:shadow-2xl h-40" data-area="Ciências da Natureza">
-                <svg class="icon-lg mb-1" viewBox="0 0 24 24">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/>
-                    <line x1="16" y1="17" x2="8" y2="17"/>
-                </svg>
-                <div class="flex flex-col items-center flex-grow justify-center mt-2">
-                    <h2 class="font-bold text-main">Ciências da Natureza e suas Tecnologias</h2>
-                    <p class="text-xs mt-1 leading-tight" style="color: var(--cor-texto-secundario);">Biologia, Química, Física.</p>
-                </div>
-            </a>
-
-        </main>
-        
+        </div>
         <div id="area-content" class="w-full max-w-4xl mx-auto mt-12 mb-20 hidden p-4 sm:p-0">
 
             <div id="humanas-content" class="content-section hidden opacity-0">
@@ -411,17 +509,19 @@
             const mainButtons = document.querySelectorAll('#main-menu a');
             const areaContentContainer = document.getElementById('area-content');
             const contentSections = document.querySelectorAll('.content-section');
-            // Re-seleciona todos os slots de imagem, incluindo os novos
             const imageSlots = document.querySelectorAll('.image-slot'); 
+            const menuAnimationArea = document.getElementById('menu-animation-area'); // Novo elemento de animação
 
             // Mapeamento de área para ID de conteúdo
             const contentMap = {
-                // Os data-area continuam com o nome da área, não o nome completo (para manter a lógica de mapeamento)
                 'Matemática': 'matematica-content',
                 'Linguagens': 'linguagens-content',
                 'Ciências Humanas': 'humanas-content',
                 'Ciências da Natureza': 'natureza-content'
             };
+
+            // 1. Configuração do estado inicial (Centralizado)
+            menuAnimationArea.classList.add('menu-state-centered');
 
             // Adiciona a classe de transição inicial a todas as seções
             contentSections.forEach(section => {
@@ -439,7 +539,6 @@
                         section.classList.add('opacity-0');
 
                         // Após a transição (500ms), esconde totalmente
-                        // Usamos setTimeout para permitir que a transição CSS ocorra
                         setTimeout(() => {
                             section.classList.add('hidden');
                         }, 500);
@@ -458,8 +557,17 @@
 
                     const areaName = e.currentTarget.getAttribute('data-area');
                     const targetContentId = contentMap[areaName];
+                    
+                    // --- NOVA LÓGICA DE ANIMAÇÃO DE SUBIDA ---
+                    // Se estiver no estado inicial, aciona a animação de subida
+                    if (menuAnimationArea.classList.contains('menu-state-centered')) {
+                        menuAnimationArea.classList.remove('menu-state-centered');
+                        menuAnimationArea.classList.add('menu-state-top');
+                    }
+                    // ----------------------------------------
 
-                    // Esconde todos os conteúdos existentes com fade out
+
+                    // Lógica de esconder e mostrar conteúdo
                     hideAllContent(); 
                     
                     if (targetContentId) {
@@ -473,16 +581,16 @@
 
                         // Mostra a seção de conteúdo específica com fade in
                         if (targetContent) {
-                            // Remove 'hidden' para que o elemento comece a ocupar espaço no layout
-                            targetContent.classList.remove('hidden'); 
-                            
-                            // Força um reflow síncrono para garantir que o navegador 
-                            // reconheça o estado inicial (opacity-0) antes de aplicar o opacity-100
-                            void targetContent.offsetWidth; 
-
-                            // Inicia o fade in
-                            targetContent.classList.remove('opacity-0');
-                            targetContent.classList.add('opacity-100');
+                            // Após a animação de subida (700ms), o conteúdo pode aparecer. 
+                            // Adicionar um pequeno delay garante que a transição de layout termine.
+                            setTimeout(() => {
+                                targetContent.classList.remove('hidden'); 
+                                // Força um reflow síncrono
+                                void targetContent.offsetWidth; 
+                                // Inicia o fade in
+                                targetContent.classList.remove('opacity-0');
+                                targetContent.classList.add('opacity-100');
+                            }, 50); // Delay mínimo para garantir o reflow após a transição de layout
                         }
                     } else {
                         // Se a área não tem conteúdo mapeado, esconde o container principal
@@ -491,25 +599,16 @@
                 });
             });
 
-            // --- Lógica de Navegação para o Simulado (ALTERADA!) ---
-            // Agora, ao clicar no slot, ele navega para `simulado.html` 
-            // passando a matéria e o tópico na URL.
+            // Lógica de Navegação para o Simulado
             imageSlots.forEach(slot => {
                 slot.addEventListener('click', (e) => {
-                    // Não é mais necessário e.preventDefault()
                     const subArea = e.currentTarget.getAttribute('data-sub-area');
                     const topic = e.currentTarget.getAttribute('data-topic');
                     
-                    // Constrói a URL para a página do simulado com os parâmetros (ex: simulado.html?subarea=Biologia&topic=01)
                     const targetURL = `simulado.html?subarea=${encodeURIComponent(subArea)}&topic=${topic}`;
-                    
-                    // O slot é um <a>, então apenas atualizar o href é suficiente.
                     e.currentTarget.href = targetURL;
-                    
-                    // O clique padrão fará a navegação para a URL correta.
                 });
             });
-            // --------------------------------------------------------
 
         });
     </script>

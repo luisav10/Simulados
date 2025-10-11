@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20% Educacional - Acompanhamento de Progresso</title>
+    <!-- Carregamento do Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carregamento da fonte Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Carregamento do Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* Variáveis de Cores (Paleta replicada do index.html) */
+        :root {
+            --primary-color: #12335A; /* Azul Escuro Principal */
+            --secondary-color: #1A2847; /* Azul Escuro Secundário */
+            --button-border-color: #3F7996; /* Azul Ciano Claro */
+            --cor-fundo: #0f0f1a; /* Fundo Principal */
+            --cor-fundo-secundario: #161622; /* Fundo de Cards/Secundário */
+            --cor-borda: rgba(255, 255, 255, 0.08);
+            --cor-texto: #eaeaea;
+            --cor-texto-secundario: #a0a0a0;
+            --success-color: #4CAF50; /* Verde */
+            --danger-color: #F44336; /* Vermelho */
+            --warning-color: #FFC107; /* Amarelo */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            /* Novo Background GIF com Overlay para legibilidade */
+            background-image: linear-gradient(rgba(15, 15, 26, 0.9), rgba(15, 15, 26, 0.9)), url('https://art.ngfiles.com/images/2402000/2402867_vulpsvulps_space.gif?f1647212328');
+            background-size: cover;
+            background-attachment: fixed; /* Garante que o fundo não se mova ao rolar */
+            background-position: center;
+        }
+
+        /* Classes utilitárias usando as variáveis */
+        .card-bg {
+            background-color: var(--cor-fundo-secundario);
+            border: 1px solid var(--cor-borda);
+        }
+
+        .text-primary { color: var(--button-border-color); }
+        .text-success { color: var(--success-color); }
+        .text-danger { color: var(--danger-color); }
+        .bg-primary-dark { background-color: var(--primary-color); }
+        .border-accent { border-color: var(--button-border-color); }
+        
+        /* Chaveamento para Animação de Entrada */
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-on-load {
+            opacity: 0;
+            animation: fadeInSlideUp 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Novo Cabeçalho de Navegação (seta, título e logo) -->
+    <!-- O título foi movido para a esquerda, agrupado com a seta -->
+    <div class="flex justify-between items-center mb-4 pt-2">
+        
+        <!-- Seta de Navegação e Título agrupados à esquerda -->
+        <div class="flex items-center space-x-2"> 
+            <!-- Seta de Navegação (Esquerda) -->
+            <a href="#" class="text-cor-texto-secundario hover:text-button-border-color transition-colors p-2 -ml-2">
+                <i data-lucide="arrow-left" class="w-6 h-6"></i>
+            </a>
+            
+            <!-- Título alinhado ao lado da seta -->
+            <h2 class="text-xl font-semibold text-cor-texto uppercase tracking-wider">
+                Progresso
+            </h2>
+        </div>
+        
+        <!-- Espaço para Logo (Direita) -->
+        <div class="w-6 h-6">
+            <!-- Aqui você pode colocar uma tag <img> ou <svg> para a logo -->
+        </div>
+    </div>
+    
+    <!-- Linha Divisória Horizontal -->
+    <!-- Adicionado -mx-4 md:-mx-8 e w-full para forçar a largura total, ignorando o padding do body -->
+    <hr class="border-cor-borda mb-8 w-full -mx-4 md:-mx-8">
+
+    <header class="mb-8 md:mb-12">
+        <!-- Cor do título ajustada para melhor contraste -->
+        <h1 class="text-3xl md:text-5xl font-bold text-center text-button-border-color mb-2 animate-on-load" style="animation-delay: 0.1s;">
+            Meu Progresso Educacional
+        </h1>
+        <p class="text-lg text-center text-cor-texto-secundario animate-on-load" style="animation-delay: 0.2s;">
+            Detalhes e evolução do seu desempenho em simulados e questões.
+        </p>
+    </header>
+
+    <!-- Adicionado max-w-7xl mx-auto para centralizar e controlar a largura, melhorando o alinhamento visual em telas grandes -->
+    <main id="progress-container" class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+
+        <!-- Coluna de Resumos Rápidos (Mobile: Top / Desktop: Esquerda) -->
+        <section class="lg:col-span-1 space-y-6">
+
+            <!-- Card 1: Resumo Geral de Atividade -->
+            <div class="card-bg p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl animate-on-load" style="animation-delay: 0.3s;">
+                <h2 class="flex items-center text-xl font-semibold mb-4 border-b pb-2 border-cor-borda">
+                    <i data-lucide="book-open-check" class="w-6 h-6 mr-2 text-button-border-color"></i>
+                    Atividade Total
+                </h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-cor-texto-secundario">Simulados Realizados:</span>
+                        <span id="total-simulados" class="text-2xl font-bold text-primary">0</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-cor-texto-secundario">Questões Resolvidas:</span>
+                        <span id="total-questoes" class="text-2xl font-bold text-primary">0</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-2 border-t border-cor-borda">
+                        <span class="text-cor-texto-secundario">Média de Acertos Geral:</span>
+                        <span id="media-acertos" class="text-2xl font-bold text-primary">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Desempenho (Certas vs. Erradas) -->
+            <div class="card-bg p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl animate-on-load" style="animation-delay: 0.4s;">
+                <h2 class="flex items-center text-xl font-semibold mb-4 border-b pb-2 border-cor-borda">
+                    <i data-lucide="check-circle" class="w-6 h-6 mr-2 text-success"></i>
+                    Acertos vs. Erros
+                </h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-cor-texto-secundario">Corretas:</span>
+                        <span id="certas" class="text-xl font-bold text-success">0</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-cor-texto-secundario">Incorretas:</span>
+                        <span id="erradas" class="text-xl font-bold text-danger">0</span>
+                    </div>
+                    <!-- Gráfico Donut/Pie para visualização rápida (será renderizado via JS) -->
+                    <div class="mt-4 flex justify-center">
+                        <canvas id="accuracy-chart" class="max-w-[200px] max-h-[200px]"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 3: Tempo de Resolução Médio -->
+            <div class="card-bg p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl animate-on-load" style="animation-delay: 0.5s;">
+                <h2 class="flex items-center text-xl font-semibold mb-4 border-b pb-2 border-cor-borda">
+                    <i data-lucide="clock" class="w-6 h-6 mr-2 text-warning"></i>
+                    Tempo Médio por Questão
+                </h2>
+                <div id="tempo-medio-container" class="space-y-3">
+                    <!-- Detalhes de tempo serão preenchidos por JS -->
+                    <p class="text-cor-texto-secundario">Carregando dados de tempo...</p>
+                </div>
+            </div>
+
+        </section>
+        
+        <!-- Coluna Principal (Mobile: Meio / Desktop: Direita - 2/3) -->
+        <section class="lg:col-span-2 space-y-6">
+
+            <!-- Card 4: Gráfico de Evolução de Acertos (Histórico) -->
+            <div class="card-bg p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl animate-on-load" style="animation-delay: 0.6s;">
+                <h2 class="flex items-center text-xl font-semibold mb-4 border-b pb-2 border-cor-borda">
+                    <i data-lucide="activity" class="w-6 h-6 mr-2 text-primary"></i>
+                    Evolução Histórica de Acertos (%)
+                </h2>
+                <div class="relative h-64 md:h-96">
+                    <canvas id="evolution-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Card 5: Detalhamento por Matéria -->
+            <div class="card-bg p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl animate-on-load" style="animation-delay: 0.7s;">
+                <h2 class="flex items-center text-xl font-semibold mb-4 border-b pb-2 border-cor-borda">
+                    <i data-lucide="layers-3" class="w-6 h-6 mr-2 text-button-border-color"></i>
+                    Detalhamento por Matéria
+                </h2>
+                <div id="materia-detalhes-container" class="divide-y divide-cor-borda">
+                    <!-- Detalhes por matéria (simulados, questões, acertos, tempo) -->
+                    <p class="p-4 text-center text-cor-texto-secundario">Carregando detalhamento...</p>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"; // Para debug
+
+        // Configuração e Inicialização do Firebase
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        // setLogLevel('Debug'); // Ativar para debug de console
+        
+        let app, db, auth;
+        let userId = null;
+        let isAuthReady = false;
+
+        // Estrutura de dados inicial para um novo usuário
+        const initialProgressData = {
+            totalSimulados: 0,
+            totalQuestoes: 0,
+            certas: 0,
+            erradas: 0,
+            historicoSimulados: [
+                { data: 'Mês 1', acertos: 0, erros: 0 },
+            ],
+            materias: [
+                { nome: 'Matemática', simulados: 0, questoes: 0, certas: 0, tempoMedio: 0 },
+                { nome: 'Português', simulados: 0, questoes: 0, certas: 0, tempoMedio: 0 },
+            ],
+            // Usamos a mesma estrutura de mock, mas com valores iniciais zero
+        };
+
+        // Função para obter a referência do documento de progresso privado do usuário
+        const getProgressDocRef = (db, uid) => {
+            if (!uid) return null;
+            // Caminho: /artifacts/{appId}/users/{userId}/student_progress/performance
+            return doc(db, 'artifacts', appId, 'users', uid, 'student_progress', 'performance');
+        };
+
+        // Função utilitária para formatar segundos em M:SS
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}m ${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}s`;
+        }
+
+        // 1. Renderiza o Resumo Geral e Desempenho
+        function renderSummary(data) {
+            const total = data.certas + data.erradas;
+            const mediaAcertos = total > 0 ? ((data.certas / total) * 100).toFixed(1) : 0;
+            
+            document.getElementById('total-simulados').textContent = data.totalSimulados;
+            document.getElementById('total-questoes').textContent = data.totalQuestoes;
+            document.getElementById('certas').textContent = data.certas;
+            document.getElementById('erradas').textContent = data.erradas;
+            document.getElementById('media-acertos').textContent = `${mediaAcertos}%`;
+
+            // Garante que o gráfico seja destruído antes de ser renderizado novamente
+            const oldChart = Chart.getChart('accuracy-chart');
+            if (oldChart) oldChart.destroy();
+
+            // Renderiza o gráfico de Donut de Acertos vs. Erros
+            const ctx = document.getElementById('accuracy-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Acertos', 'Erros'],
+                    datasets: [{
+                        data: [data.certas, data.erradas],
+                        backgroundColor: [
+                            getComputedStyle(document.documentElement).getPropertyValue('--success-color').trim(),
+                            getComputedStyle(document.documentElement).getPropertyValue('--danger-color').trim()
+                        ],
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--cor-texto').trim() }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed;
+                                    const percentage = (value / total * 100).toFixed(1);
+                                    return `${context.label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. Renderiza o Gráfico de Evolução
+        function renderEvolutionChart(data) {
+            const labels = data.historicoSimulados.map(h => h.data);
+            const acertosData = data.historicoSimulados.map(h => h.acertos);
+            const errosData = data.historicoSimulados.map(h => h.erros);
+            
+            const oldChart = Chart.getChart('evolution-chart');
+            if (oldChart) oldChart.destroy();
+
+            const ctx = document.getElementById('evolution-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Acertos (%)',
+                            data: acertosData,
+                            borderColor: getComputedStyle(document.documentElement).getPropertyValue('--success-color').trim(),
+                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                            tension: 0.4,
+                            fill: true,
+                        },
+                        {
+                            label: 'Erros (%)',
+                            data: errosData,
+                            borderColor: getComputedStyle(document.documentElement).getPropertyValue('--danger-color').trim(),
+                            backgroundColor: 'rgba(244, 67, 54, 0.2)',
+                            tension: 0.4,
+                            fill: true,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Percentual (%)',
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--cor-texto-secundario').trim()
+                            },
+                            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--cor-texto').trim() },
+                            grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--cor-borda').trim() }
+                        },
+                        x: {
+                            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--cor-texto').trim() },
+                            grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--cor-borda').trim() }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--cor-texto').trim() }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 3. Renderiza o Detalhamento por Matéria e Tempo Médio
+        function renderSubjectDetails(data) {
+            const container = document.getElementById('materia-detalhes-container');
+            const tempoContainer = document.getElementById('tempo-medio-container');
+            
+            container.innerHTML = '';
+            tempoContainer.innerHTML = '';
+
+            let totalTempoMedio = 0;
+            let countMateriasTempo = 0;
+            
+            if (data.materias && data.materias.length > 0) {
+                data.materias.forEach(materia => {
+                    const totalMateria = materia.questoes;
+                    const acertoMateria = totalMateria > 0 ? ((materia.certas / totalMateria) * 100).toFixed(1) : 0;
+                    
+                    // Card de Detalhamento
+                    const detailHtml = `
+                        <div class="p-4 sm:flex justify-between items-center">
+                            <div class="mb-2 sm:mb-0">
+                                <h3 class="text-lg font-semibold text-button-border-color">${materia.nome}</h3>
+                                <p class="text-sm text-cor-texto-secundario">
+                                    Simulados: <span class="font-medium text-cor-texto">${materia.simulados}</span> |
+                                    Questões: <span class="font-medium text-cor-texto">${materia.questoes}</span>
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-base font-bold text-cor-texto">Acertos: <span class="${acertoMateria >= 70 ? 'text-success' : acertoMateria >= 50 ? 'text-warning' : 'text-danger'}">${acertoMateria}%</span></p>
+                                <p class="text-sm text-cor-texto-secundario">Tempo Médio: ${formatTime(materia.tempoMedio)}</p>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += detailHtml;
+
+                    // Card de Tempo Médio (apenas resumo)
+                    const tempoHtml = `
+                        <div class="flex justify-between items-center">
+                            <span class="text-cor-texto-secundario">${materia.nome}:</span>
+                            <span class="text-xl font-semibold text-cor-texto">${formatTime(materia.tempoMedio)}</span>
+                        </div>
+                    `;
+                    tempoContainer.innerHTML += tempoHtml;
+
+                    totalTempoMedio += materia.tempoMedio;
+                    countMateriasTempo++;
+                });
+
+                // Adiciona o tempo médio geral no card de tempo
+                if (countMateriasTempo > 0) {
+                    const mediaGeral = Math.round(totalTempoMedio / countMateriasTempo);
+                    const mediaGeralHtml = `
+                        <div class="flex justify-between items-center pt-2 border-t border-cor-borda mt-3">
+                            <span class="text-cor-texto-secundario font-bold">Média Geral:</span>
+                            <span class="text-2xl font-bold text-warning">${formatTime(mediaGeral)}</span>
+                        </div>
+                    `;
+                    tempoContainer.innerHTML += mediaGeralHtml;
+                }
+            } else {
+                container.innerHTML = '<p class="p-4 text-center text-cor-texto-secundario">Nenhum detalhe de matéria encontrado.</p>';
+                tempoContainer.innerHTML = '<p class="text-cor-texto-secundario">Nenhum dado de tempo disponível.</p>';
+            }
+        }
+
+        // Função principal para iniciar o carregamento dos dados via onSnapshot
+        function startProgressListener(uid) {
+            const progressRef = getProgressDocRef(db, uid);
+            
+            // Tenta obter o documento uma vez para verificar se existe
+            getDoc(progressRef).then(docSnap => {
+                if (!docSnap.exists()) {
+                    // Se o documento não existir, cria-o com os dados iniciais
+                    console.log("Documento de progresso não encontrado. Criando documento inicial.");
+                    setDoc(progressRef, initialProgressData).catch(error => {
+                         console.error("Erro ao criar documento inicial:", error);
+                         // Renderiza o UI com os dados iniciais mesmo em caso de falha de escrita (para mostrar algo)
+                         renderProgressUI(initialProgressData);
+                    });
+                }
+            }).catch(error => {
+                console.error("Erro ao verificar/criar documento de progresso:", error);
+            });
+
+
+            // Listener em tempo real (onSnapshot)
+            onSnapshot(progressRef, (doc) => {
+                if (doc.exists()) {
+                    const progressData = doc.data();
+                    console.log("Dados de progresso atualizados:", progressData);
+                    renderProgressUI(progressData);
+                } else {
+                    // Se o documento for excluído (ou ainda não existir antes de ser criado)
+                    console.log("Documento de progresso não existe.");
+                    renderProgressUI(initialProgressData);
+                }
+            }, (error) => {
+                console.error("Erro no listener do Firestore:", error);
+                // Em caso de erro, renderiza com dados iniciais e mensagem de falha
+                renderProgressUI(initialProgressData);
+                document.getElementById('materia-detalhes-container').innerHTML = '<p class="p-4 text-center text-danger">Erro ao carregar dados em tempo real. Tente novamente.</p>';
+            });
+        }
+        
+        // Função para consolidar a renderização da interface
+        function renderProgressUI(data) {
+            renderSummary(data);
+            renderEvolutionChart(data);
+            renderSubjectDetails(data);
+            
+            // Inicializa ícones Lucide (sempre bom chamar após o innerHTML)
+            lucide.createIcons();
+            
+            // Ativa as animações após o carregamento dos dados
+            const animatedElements = document.querySelectorAll('.animate-on-load');
+            animatedElements.forEach(el => {
+                el.style.opacity = 1; 
+                el.style.transform = 'translateY(0)'; 
+            });
+        }
+
+
+        // Inicialização Principal
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                if (Object.keys(firebaseConfig).length === 0) {
+                     console.error("A configuração do Firebase não está disponível. Usando dados mock iniciais.");
+                     renderProgressUI(initialProgressData);
+                     return;
+                }
+                
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Autenticação
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                // Listener de Estado de Autenticação
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        isAuthReady = true;
+                        // Em um ambiente real, você poderia mostrar o userId no canto para debug
+                        // document.getElementById('user-id-display').textContent = userId; 
+                        console.log("Usuário autenticado:", userId);
+                        startProgressListener(userId);
+                    } else {
+                        // Isso só deve ocorrer se o token inicial for inválido ou o login falhar
+                        console.error("Falha na autenticação. Não é possível carregar o progresso do usuário.");
+                        renderProgressUI(initialProgressData);
+                    }
+                });
+
+            } catch (error) {
+                console.error("Erro fatal ao inicializar o Firebase ou autenticar:", error);
+                renderProgressUI(initialProgressData);
+            }
+        });
+    </script>
+</body>
+</html>

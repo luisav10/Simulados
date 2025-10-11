@@ -74,18 +74,11 @@
         }
         
         /* Efeito de Hover */
-        .alternative-btn:hover {
+        .alternative-btn:hover:not(:disabled) {
             border-color: var(--button-border-color); /* Borda de destaque no hover */
             background-color: var(--secondary-color);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Estado Selecionado (Clique) */
-        .alternative-btn.selected {
-            border-color: #fca311; /* Cor de seleção */
-            background-color: #1a2847; 
-            transform: none;
         }
 
         /* Estado Correto (Pós-resposta) */
@@ -99,6 +92,14 @@
         .alternative-btn.incorrect {
             border-color: #dc3545; /* Vermelho para incorreto */
             background-color: rgba(220, 53, 69, 0.2); 
+        }
+
+        /* Desabilita botões respondidos - O cursor deve indicar que não é clicável */
+        .alternative-btn:disabled {
+            cursor: not-allowed;
+            pointer-events: all; /* Garante que o hover desabilitado não atrapalhe a cor */
+            box-shadow: none;
+            transform: none;
         }
 
         /* --- Estilo da Área de Imagem da Questão --- */
@@ -116,6 +117,30 @@
             background-color: var(--secondary-color);
             border: 2px solid var(--button-border-color);
             padding: 1.5rem;
+        }
+        
+        /* Estilo do Modal de Feedback do Bloco e Continuação */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9); /* Fundo escuro */
+            z-index: 50; /* Acima de tudo */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* --- Classes para Animação de Dropdown (Resolução) --- */
+        /* max-h-0 já existe, mas vamos garantir o !important */
+        .max-h-0 {
+            max-height: 0 !important;
+        }
+        /* Classe para abrir (um valor grande o suficiente para o conteúdo) */
+        .max-h-full-dynamic {
+            max-height: 1000px; 
         }
 
     </style>
@@ -140,7 +165,11 @@
         <main id="question-area" class="question-card rounded-xl p-6 sm:p-8 mb-12">
             
             <div class="flex justify-between items-start mb-4 pb-2 border-b border-white/10">
-                <h2 id="question-number" class="text-xl font-bold text-accent">Questão 1/10</h2>
+                <div class="flex items-center space-x-4">
+                    <h2 id="question-number" class="text-xl font-bold text-main">Questão 1/10</h2> 
+                    <span id="answer-status" class="text-sm font-semibold flex items-center">
+                         </span>
+                </div>
                 <span id="current-topic" class="text-sm font-semibold" style="color: var(--cor-texto-secundario);">Tópico: Enem 2021</span>
             </div>
 
@@ -155,30 +184,33 @@
             </section>
             
             <section id="alternatives" class="grid grid-cols-1 gap-4">
-                <button class="alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none" data-value="A">
-                    <span class="font-bold text-accent mr-3">A)</span> 
-                    Alternativa A: O texto da alternativa será carregado aqui.
-                </button>
-                <button class="alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none" data-value="B">
-                    <span class="font-bold text-accent mr-3">B)</span> 
-                    Alternativa B: O texto da alternativa será carregado aqui.
-                </button>
-                <button class="alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none" data-value="C">
-                    <span class="font-bold text-accent mr-3">C)</span> 
-                    Alternativa C: O texto da alternativa será carregado aqui.
-                </button>
-                <button class="alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none" data-value="D">
-                    <span class="font-bold text-accent mr-3">D)</span> 
-                    Alternativa D: O texto da alternativa será carregado aqui.
-                </button>
-                <button class="alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none" data-value="E">
-                    <span class="font-bold text-accent mr-3">E)</span> 
-                    Alternativa E: O texto da alternativa será carregado aqui.
-                </button>
-            </section>
+                </section>
             
-            <div class="flex justify-end mt-8 pt-4 border-t border-white/10">
-                <button id="next-question-btn" class="bg-button-border-color text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-button-active-bg" style="background-color: var(--button-border-color);">
+            <div id="immediate-resolution-area" class="mt-8 hidden">
+                <h4 id="feedback-message" class="text-xl font-bold mb-3 flex items-center">
+                    </h4>
+                <div id="correct-answer-display" class="p-3 mb-4 rounded-lg text-sm hidden" style="background-color: rgba(220, 53, 69, 0.2); border: 1px solid #dc3545;">
+                    <span class="font-bold text-red-400">Incorreta. A correta era:</span> <span id="correct-answer-text" class="text-main"></span>
+                </div>
+                
+                <button id="toggle-resolution-btn" class="w-full text-left font-bold py-3 px-5 rounded-lg transition duration-300 flex items-center justify-between" 
+                        style="background-color: var(--secondary-color); color: var(--button-border-color); border: 1px solid var(--button-border-color);">
+                    <span>Ver Resolução</span>
+                    <svg id="resolution-toggle-icon" class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div id="resolution-text-container" class="transition-all duration-500 overflow-hidden max-h-0">
+                    <div class="p-4 rounded-b bg-gray-800 text-sm mt-2" style="color: var(--cor-texto-secundario);">
+                        <span class="font-bold text-accent">Resolução:</span> <span id="resolution-content"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mt-8 pt-4 border-t border-white/10">
+                 <button id="prev-question-btn" class="bg-gray-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-gray-700 disabled:opacity-50" disabled>
+                    Questão Anterior
+                </button>
+                
+                <button id="next-question-btn" class="bg-button-border-color text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-button-active-bg disabled:opacity-50" style="background-color: var(--button-border-color);" disabled>
                     Próxima Questão
                 </button>
             </div>
@@ -187,26 +219,105 @@
 
 
         <section id="result-area" class="hidden my-12 transition-opacity duration-700 opacity-0">
-            <h2 class="text-4xl font-extrabold text-main text-center mb-6" style="color: var(--button-border-color);">Simulado Finalizado! 🥳</h2>
+            <h2 class="text-4xl font-extrabold text-main text-center mb-6" style="color: var(--button-border-color);">
+                <span id="final-header-icon" class="inline-block mr-3">
+                    </span>
+                Performance Final
+            </h2>
             
-            <div class="result-box rounded-xl text-center shadow-2xl p-6 sm:p-10">
-                <p class="text-xl text-white mb-4">Sua Performance em <span id="final-area-title" class="font-bold"></span>:</p>
-                <div class="text-5xl font-extrabold mb-8 text-green-400">
-                    <span id="final-score">X</span> de <span id="total-questions">Y</span> Acertos
+            <div class="result-box rounded-xl shadow-2xl p-6 sm:p-10 mb-8">
+                <p class="text-xl text-white mb-4 text-center">Resumo do Simulado de <span id="final-area-title" class="font-bold"></span>:</p>
+                
+                <div class="grid grid-cols-3 gap-4 mb-6 text-center">
+                    <div class="p-4 rounded-lg" style="background-color: var(--card-bg-color); border: 1px solid var(--cor-borda);">
+                        <span class="text-lg font-semibold text-main block mb-1">Acertos</span>
+                        <span id="final-score-display" class="text-3xl font-extrabold text-green-400">0 / 0</span>
+                    </div>
+                    
+                    <div class="p-4 rounded-lg" style="background-color: var(--card-bg-color); border: 1px solid var(--cor-borda);">
+                        <span class="text-lg font-semibold text-main block mb-1">Tempo Total</span>
+                        <span id="final-time" class="text-2xl font-extrabold" style="color: var(--button-border-color);">0 min 0 seg</span>
+                    </div>
+
+                    <div class="p-4 rounded-lg" style="background-color: var(--card-bg-color); border: 1px solid var(--cor-borda);">
+                        <span class="text-lg font-semibold text-main block mb-1">Aproveitamento</span>
+                        <span id="final-percentage" class="text-2xl font-extrabold text-white">0%</span>
+                    </div>
                 </div>
-                
-                <p class="text-lg" style="color: var(--cor-texto-secundario);">Parabéns! Reveja os detalhes abaixo para aprender com seus erros.</p>
-                
-                <button id="view-resolution-btn" class="mt-8 bg-gray-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-gray-700">
-                    Ver Resolução Completa
-                </button>
+
+                <div class="text-center mt-6">
+                    <button onclick="window.location.href='index.html'" class="bg-red-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-red-800">
+                        Voltar para o Menu Inicial
+                    </button>
+                </div>
             </div>
-            
-            <div id="resolution-details" class="mt-10 hidden">
-                <h3 class="text-3xl font-bold text-main mb-6 border-b border-white/10 pb-2">Detalhes e Resolução</h3>
+
+            <h3 class="text-2xl font-bold text-main mb-4 border-b border-white/10 pb-2">Revisão Detalhada</h3>
+            <div id="final-review-list" class="space-y-3">
                 </div>
+            
         </section>
 
+    </div>
+    
+    <div id="block-feedback-modal" class="modal-overlay hidden">
+        <div class="bg-card-bg-color rounded-xl p-8 sm:p-10 w-full max-w-lg mx-4 shadow-2xl border" style="border-color: var(--button-border-color);">
+            <h3 class="text-3xl font-bold text-main mb-6 text-center flex items-center justify-center">
+                <svg class="w-8 h-8 mr-3 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                Relatório de Bloco <span id="block-number">1</span>
+            </h3>
+
+            <div class="space-y-4 mb-6 border-b border-white/10 pb-6">
+                <div class="flex justify-between items-center p-4 rounded-lg" style="background-color: var(--secondary-color);">
+                    <span class="text-xl font-semibold text-main">Acertos:</span>
+                    <span id="block-score" class="text-3xl font-extrabold text-green-400">0 de 10 (0%)</span> 
+                </div>
+                
+                <div class="flex justify-between items-center p-4 rounded-lg" style="background-color: var(--secondary-color);">
+                    <span class="text-xl font-semibold text-main">Tempo Total Gasto:</span>
+                    <span id="block-time" class="text-2xl font-extrabold" style="color: var(--button-border-color);">0 min 0 seg</span>
+                </div>
+            </div>
+
+            <p class="text-center text-lg font-semibold mb-4" style="color: var(--cor-texto-secundario);">Análise de Produtividade:</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 rounded-lg text-center" style="background-color: var(--secondary-color);">
+                    <span class="text-sm font-semibold text-main block mb-1">Taxa de Erro:</span>
+                    <span id="block-error-rate" class="text-xl font-extrabold text-white">Baixa</span>
+                </div>
+
+                <div class="p-4 rounded-lg text-center" style="background-color: var(--secondary-color);">
+                    <span class="text-sm font-semibold text-main block mb-1">Velocidade (Média):</span>
+                    <span id="block-time-classification" class="text-xl font-extrabold text-white">Bom</span>
+                </div>
+            </div>
+
+            <button id="continue-quiz-btn" class="mt-8 w-full bg-button-border-color text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-button-active-bg" style="background-color: var(--button-border-color);">
+                Continuar Simulado
+            </button>
+        </div>
+    </div>
+    
+    <div id="continue-modal" class="modal-overlay hidden">
+        <div class="bg-card-bg-color rounded-xl p-8 sm:p-10 w-full max-w-lg mx-4 shadow-2xl border" style="border-color: var(--button-border-color);">
+            <h3 class="text-3xl font-bold text-main mb-4 text-center">
+                Continuar Simulado?
+            </h3>
+            <p class="text-lg text-center mb-6" style="color: var(--cor-texto-secundario);">
+                Encontramos um progresso salvo no tópico <span id="saved-topic-display" class="font-bold"></span>. Você parou na Questão <span id="saved-question-number" class="font-bold"></span>.
+            </p>
+
+            <div class="flex justify-between space-x-4">
+                <button id="restart-quiz-btn" class="w-1/2 bg-gray-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-gray-700">
+                    Reiniciar (Apagar Progresso)
+                </button>
+                <button id="continue-saved-quiz-btn" class="w-1/2 bg-green-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-green-700">
+                    Continuar
+                </button>
+            </div>
+        </div>
     </div>
 
 <script>
@@ -216,9 +327,17 @@
         let quizData = []; 
         let subAreaName = "Área"; 
         
+        // Variáveis de tempo e bloco
+        let quizStartTime = 0; 
+        let quizEndTime = 0; // Adicionada para capturar o fim do quiz
+        let blockStartTime = 0; // Início do bloco atual
+        let blockResults = []; // Resultados dos blocos
+        const BLOCK_SIZE = 10; // Tamanho do bloco de feedback
+        const TARGET_TIME_PER_QUESTION_SEC = 180; // 3 minutos por questão
+
         // Mapeamento de áreas (para buscar no JSON)
         const areaMap = {
-            'Matemática': 'Matemática', // Área Principal: Sub-área:
+            'Matemática': 'Matemática',
             'Língua Portuguesa': 'Linguagens',
             'Literatura': 'Linguagens',
             'Língua Estrangeira': 'Linguagens',
@@ -233,7 +352,37 @@
             'Física': 'Ciências da Natureza'
         };
 
-        // Função para ler os parâmetros da URL
+        // --- FUNÇÕES DE PERSISTÊNCIA (localStorage) ---
+        
+        function getStorageKey(subarea, topic) {
+            return `quizState_${subarea}_${topic}`;
+        }
+
+        function saveQuizState() {
+            const { subarea, topic } = getUrlParameters();
+            const key = getStorageKey(subarea, topic);
+            
+            const state = {
+                answers: userAnswers,
+                lastQuestionIndex: currentQuestionIndex,
+                quizStartTime: quizStartTime // Salva o tempo de início para cálculo futuro
+            };
+            
+            try {
+                localStorage.setItem(key, JSON.stringify(state));
+            } catch (e) {
+                console.error("Não foi possível salvar o estado no localStorage", e);
+            }
+        }
+        
+        function clearQuizState() {
+            const { subarea, topic } = getUrlParameters();
+            const key = getStorageKey(subarea, topic);
+            localStorage.removeItem(key);
+        }
+        
+        // --- FUNÇÕES AUXILIARES ---
+
         function getUrlParameters() {
             const params = new URLSearchParams(window.location.search);
             return {
@@ -242,33 +391,24 @@
             };
         }
 
-        // Função para buscar os dados no arquivo JSON
         async function fetchQuizData(subarea, topic) {
             const areaPrincipal = areaMap[subarea];
-            
             if (!areaPrincipal) {
                 console.error(`Área principal não mapeada para a sub-área: ${subarea}`);
                 return [];
             }
-
             try {
-                // Tenta buscar o arquivo questoes.json (deve estar na mesma pasta)
                 const response = await fetch('questoes.json');
-                
                 if (!response.ok) {
-                    throw new Error(`Erro ${response.status} ao carregar o arquivo questoes.json. Verifique se o arquivo existe.`);
+                    throw new Error(`Erro ${response.status} ao carregar o arquivo questoes.json.`);
                 }
-                
                 const data = await response.json();
-
-                // Busca as questões específicas usando a hierarquia: [Área Principal] -> [Sub-área] -> [Tópico]
                 if (data[areaPrincipal] && data[areaPrincipal][subarea] && data[areaPrincipal][subarea][topic]) {
-                    return data[areaPrincipal][subarea][topic]; // Retorna a lista de questões
+                    return data[areaPrincipal][subarea][topic].sort((a, b) => a.id - b.id); 
                 } else {
                     console.warn(`Tópico ou sub-área não encontrada no JSON: ${areaPrincipal} > ${subarea} > ${topic}`);
                     return [];
                 }
-
             } catch (error) {
                 console.error('Erro ao buscar ou processar os dados do quiz:', error);
                 document.getElementById('question-content').innerHTML = `<p class='text-red-400'>Não foi possível carregar os dados do simulado. Verifique o arquivo questoes.json.</p>`;
@@ -276,8 +416,7 @@
             }
         }
 
-
-        // Função principal de inicialização
+        // --- FUNÇÃO PRINCIPAL DE INICIALIZAÇÃO ---
         async function initializeQuiz() {
             const { subarea, topic } = getUrlParameters();
             
@@ -286,116 +425,434 @@
                 return;
             }
 
-            subAreaName = subarea; // Armazena o nome da sub-área
+            subAreaName = subarea; 
             
             document.getElementById('quiz-title').textContent = `Simulado de ${subarea} - Tópico ${topic}`;
             document.getElementById('current-topic').textContent = `Tópico: ${topic}`;
 
-            // *** CHAMADA DE DADOS REAL ***
             quizData = await fetchQuizData(subarea, topic);
             
-            // Inicia o quiz com a primeira questão
-            if (quizData.length > 0) {
-                loadQuestion(0);
-                updateProgress();
-            } else {
+            if (quizData.length === 0) {
                 document.getElementById('quiz-title').textContent = `Simulado de ${subarea} - SEM QUESTÕES`;
-                document.getElementById('question-content').innerHTML = "<p class='text-red-400'>Nenhuma questão encontrada para este tópico. Verifique se o arquivo 'questoes.json' foi preenchido corretamente.</p>";
+                document.getElementById('question-area').classList.add('hidden');
+                return;
+            }
+            
+            // 1. Tenta carregar o estado salvo
+            const key = getStorageKey(subarea, topic);
+            const savedState = localStorage.getItem(key);
+            
+            if (savedState) {
+                try {
+                    const state = JSON.parse(savedState);
+                    const savedIndex = state.lastQuestionIndex;
+                    
+                    if (state.answers.length === quizData.length && savedIndex < quizData.length) {
+                        
+                        document.getElementById('saved-topic-display').textContent = subarea;
+                        document.getElementById('saved-question-number').textContent = savedIndex + 1;
+                        
+                        document.getElementById('continue-modal').classList.remove('hidden');
+
+                        document.getElementById('continue-saved-quiz-btn').onclick = () => {
+                            userAnswers = state.answers;
+                            currentQuestionIndex = savedIndex; 
+                            document.getElementById('continue-modal').classList.add('hidden');
+                            
+                            quizStartTime = state.quizStartTime || performance.now(); // Restaura o tempo de início, ou usa o atual se não houver
+                            blockStartTime = performance.now();
+                            
+                            loadQuestion(currentQuestionIndex);
+                            updateProgress();
+                        };
+
+                        document.getElementById('restart-quiz-btn').onclick = () => {
+                            clearQuizState(); 
+                            document.getElementById('continue-modal').classList.add('hidden');
+                            
+                            quizStartTime = performance.now(); // Inicia novo tempo
+                            blockStartTime = performance.now();
+                            
+                            // Reincia userAnswers e carrega a primeira questão
+                            userAnswers = new Array(quizData.length);
+                            loadQuestion(0);
+                            updateProgress();
+                        };
+                        
+                        return;
+                    } else {
+                        clearQuizState();
+                    }
+                } catch (e) {
+                    console.error("Erro ao carregar ou parsear o estado salvo:", e);
+                    clearQuizState();
+                }
+            }
+            
+            // Inicia do zero se não houver estado salvo
+            userAnswers = new Array(quizData.length);
+            quizStartTime = performance.now(); // Inicia tempo
+            blockStartTime = performance.now();
+            loadQuestion(0);
+            updateProgress();
+        }
+
+        // --- Ícones SVG e Funções de Tempo ---
+        const checkCircleIcon = `
+            <svg class="w-6 h-6 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        `;
+        const crossCircleIcon = `
+            <svg class="w-6 h-6 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        `;
+
+        // Ícone de Gráfico de Barras (Mais profissional para performance)
+        const chartBarIcon = `
+            <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.055l3.414 3.414a1 1 0 01.293.707V12l-1.92 1.92M21 12a9 9 0 00-18 0"></path>
+            </svg>
+        `;
+        
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes} min ${seconds} seg`;
+        }
+        
+        // --- FUNÇÃO PARA ABRIR/FECHAR RESOLUÇÃO DA QUESTÃO ATUAL ---
+        function toggleResolution() {
+            const resolutionContainer = document.getElementById('resolution-text-container');
+            const toggleIcon = document.getElementById('resolution-toggle-icon');
+
+            if (resolutionContainer.classList.contains('max-h-0')) {
+                // Abrir
+                resolutionContainer.classList.remove('max-h-0');
+                resolutionContainer.classList.add('max-h-full-dynamic');
+                toggleIcon.classList.add('rotate-180'); // Rotaciona a seta para cima
+            } else {
+                // Fechar
+                resolutionContainer.classList.add('max-h-0');
+                resolutionContainer.classList.remove('max-h-full-dynamic');
+                toggleIcon.classList.remove('rotate-180'); // Rotaciona a seta para baixo
+            }
+        }
+        
+        // --- FUNÇÃO PARA ABRIR/FECHAR RESOLUÇÃO NA TELA DE REVISÃO (RESULTADO FINAL) ---
+        function toggleReviewResolution(index) {
+            const resolutionContainer = document.getElementById(`review-resolution-container-${index}`);
+            const toggleIcon = document.getElementById(`review-icon-${index}`);
+
+            // Fecha outros que possam estar abertos (Melhor UX)
+            document.querySelectorAll('.review-item div[id^="review-resolution-container-"]').forEach((container, i) => {
+                if (parseInt(container.getAttribute('data-index')) !== index) {
+                    container.classList.add('max-h-0');
+                    container.classList.remove('max-h-full-dynamic');
+                    const icon = document.getElementById(`review-icon-${i}`);
+                    if (icon) icon.classList.remove('rotate-180');
+                }
+            });
+
+            if (resolutionContainer.classList.contains('max-h-0')) {
+                // Abrir
+                resolutionContainer.classList.remove('max-h-0');
+                resolutionContainer.classList.add('max-h-full-dynamic');
+                toggleIcon.classList.add('rotate-180'); 
+            } else {
+                // Fechar
+                resolutionContainer.classList.add('max-h-0');
+                resolutionContainer.classList.remove('max-h-full-dynamic');
+                toggleIcon.classList.remove('rotate-180'); 
+            }
+        }
+        
+        // --- FUNÇÃO PARA CONFIGURAR A MENSAGEM DE FEEDBACK E RESOLUÇÃO ---
+        function setupResolutionFeedback(question, userAnswerLetter) {
+            const resolutionArea = document.getElementById('immediate-resolution-area');
+            const feedbackMessage = document.getElementById('feedback-message');
+            const correctAnswerDisplay = document.getElementById('correct-answer-display');
+            const resolutionContent = document.getElementById('resolution-content');
+            const resolutionContainer = document.getElementById('resolution-text-container');
+            const toggleButton = document.getElementById('toggle-resolution-btn');
+            const toggleIcon = document.getElementById('resolution-toggle-icon');
+
+            const correctAnswerLetter = question.resposta_correta;
+            const isCorrect = (userAnswerLetter === correctAnswerLetter);
+            const correctAnswerText = question.alternativas[correctAnswerLetter];
+
+            // 1. Configura a mensagem
+            if (isCorrect) {
+                feedbackMessage.innerHTML = `<span class="text-green-400 flex items-center">${checkCircleIcon} Resposta Correta!</span>`;
+                correctAnswerDisplay.classList.add('hidden'); 
+            } else {
+                feedbackMessage.innerHTML = `<span class="text-red-400 flex items-center">${crossCircleIcon} Resposta Incorreta.</span>`;
+                
+                document.getElementById('correct-answer-text').textContent = `${correctAnswerLetter}) ${correctAnswerText}`;
+                correctAnswerDisplay.classList.remove('hidden');
+                document.getElementById('correct-answer-text').classList.add('text-main');
+            }
+
+            // 2. Configura a resolução
+            resolutionContent.textContent = question.resolucao;
+            resolutionArea.classList.remove('hidden');
+            
+            // 3. Reseta o toggle para fechado
+            resolutionContainer.classList.add('max-h-0');
+            resolutionContainer.classList.remove('max-h-full-dynamic');
+            toggleIcon.classList.remove('rotate-180');
+
+            // 4. Garante que o event listener do toggle exista
+            if (!toggleButton.hasAttribute('data-listener-attached')) {
+                toggleButton.addEventListener('click', toggleResolution);
+                toggleButton.setAttribute('data-listener-attached', 'true');
             }
         }
 
-        // Função para carregar uma questão específica
+        function showBlockFeedback(lastQuestionIndex) {
+            // ... (Lógica do showBlockFeedback inalterada para o bloco)
+            const blockEndIndex = lastQuestionIndex; 
+            const blockStartIndex = blockEndIndex - (BLOCK_SIZE - 1); 
+            
+            const blockEndTime = performance.now();
+            const timeTakenMs = blockEndTime - blockStartTime;
+            const timeTakenSeconds = Math.round(timeTakenMs / 1000);
+            
+            let correctCount = 0;
+            for (let i = blockStartIndex; i <= blockEndIndex; i++) {
+                if (userAnswers[i] === quizData[i].resposta_correta) {
+                    correctCount++;
+                }
+            }
+
+            const errorCount = BLOCK_SIZE - correctCount;
+            let errorRateClassification = "";
+            let timeClassification = "";
+            let timeColor = "text-white";
+
+            if (errorCount <= 2) { 
+                errorRateClassification = "Baixa";
+            } else if (errorCount <= 5) { 
+                errorRateClassification = "Média";
+            } else { 
+                errorRateClassification = "Alta";
+            }
+
+            const averageTimePerQuestion = timeTakenSeconds / BLOCK_SIZE;
+
+            if (averageTimePerQuestion <= 150) { 
+                timeClassification = "Bom";
+                timeColor = "text-green-400";
+            } else if (averageTimePerQuestion <= TARGET_TIME_PER_QUESTION_SEC) { 
+                timeClassification = "Mais ou Menos";
+                timeColor = "text-yellow-400";
+            } else { 
+                timeClassification = "Ruim";
+                timeColor = "text-red-400";
+            }
+            
+            blockResults.push({
+                block: blockResults.length + 1,
+                score: correctCount,
+                time: timeTakenSeconds,
+                timeClassification: timeClassification,
+                errorRateClassification: errorRateClassification
+            });
+
+            const modal = document.getElementById('block-feedback-modal');
+            document.getElementById('block-number').textContent = blockResults.length;
+            document.getElementById('block-score').textContent = `${correctCount} de ${BLOCK_SIZE} (${(correctCount / BLOCK_SIZE * 100).toFixed(0)}%)`;
+            document.getElementById('block-time').textContent = formatTime(timeTakenSeconds);
+            document.getElementById('block-error-rate').textContent = errorRateClassification;
+            document.getElementById('block-time-classification').textContent = timeClassification;
+            
+            document.getElementById('block-time-classification').className = `text-xl font-extrabold ${timeColor}`;
+
+            let errorColor = "text-green-400"; 
+            if (errorRateClassification === "Média") errorColor = "text-yellow-400";
+            else if (errorRateClassification === "Alta") errorColor = "text-red-400";
+            document.getElementById('block-error-rate').className = `text-xl font-extrabold ${errorColor}`;
+
+
+            modal.classList.remove('hidden');
+            
+            document.getElementById('prev-question-btn').disabled = true;
+            document.getElementById('next-question-btn').disabled = true;
+        }
+
+        document.getElementById('continue-quiz-btn').onclick = () => {
+            document.getElementById('block-feedback-modal').classList.add('hidden');
+            
+            currentQuestionIndex++; 
+            blockStartTime = performance.now(); 
+
+            loadQuestion(currentQuestionIndex);
+            updateProgress();
+        };
+
+
+        // --- FUNÇÃO PARA CARREGAR QUESTÃO ---
         function loadQuestion(index) {
+            currentQuestionIndex = index;
+            
             const question = quizData[index];
             if (!question) return;
 
-            // 1. Atualiza o número da questão e progresso
+            saveQuizState(); 
+
             document.getElementById('question-number').textContent = `Questão ${index + 1}/${quizData.length}`;
             
-            // 2. Preenche o enunciado
             const questionContentDiv = document.getElementById('question-content');
-            questionContentDiv.innerHTML = `<p>${question.enunciado}</p>`;
+            questionContentDiv.innerHTML = question.enunciado; 
             
-            // 3. Preenche a imagem (se houver)
             const questionImageDiv = document.getElementById('question-image');
             questionImageDiv.innerHTML = ''; 
             if (question.imagem_url) {
                 questionImageDiv.innerHTML = `<img src="${question.imagem_url}" alt="Gráfico ou texto de apoio à questão" class="shadow-lg">`;
             }
 
-
-            // 4. Preenche as alternativas
             const alternativesContainer = document.getElementById('alternatives');
             alternativesContainer.innerHTML = ''; 
             const letters = ['A', 'B', 'C', 'D', 'E'];
-            let i = 0;
+            const alreadyAnswered = userAnswers[index] !== undefined; 
+            const nextBtn = document.getElementById('next-question-btn');
+            const prevBtn = document.getElementById('prev-question-btn');
+            const resolutionArea = document.getElementById('immediate-resolution-area');
+            const correctAnswerLetter = question.resposta_correta;
 
-            // Itera sobre o objeto de alternativas do JSON
+            prevBtn.disabled = index === 0;
+            // O botão 'Próxima' só é habilitado se houver uma resposta salva
+            nextBtn.disabled = !alreadyAnswered; 
+            
+            // Atualiza o Status de Resposta (A ÚNICA SINALIZAÇÃO MANTIDA)
+            const answerStatusSpan = document.getElementById('answer-status');
+            if (alreadyAnswered) {
+                answerStatusSpan.innerHTML = `
+                    <svg class="w-4 h-4 mr-1 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="text-green-400">Respondida</span>
+                `;
+            } else {
+                 answerStatusSpan.innerHTML = `
+                    <svg class="w-4 h-4 mr-1" style="color: var(--cor-texto-secundario);" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="10" cy="10" r="5"/>
+                    </svg>
+                    <span style="color: var(--cor-texto-secundario);">Não Respondida</span>
+                `;
+            }
+
+            // Esconde a área de resolução no carregamento
+            resolutionArea.classList.add('hidden'); 
+
             for (const letter of letters) {
                 const text = question.alternativas[letter];
-                if (text) { // Garante que só renderiza se a alternativa existir
+                if (text) {
                     const btn = document.createElement('button');
                     btn.className = 'alternative-btn w-full rounded-lg p-3 shadow-md hover:shadow-xl focus:outline-none';
                     btn.setAttribute('data-value', letter);
-                    btn.innerHTML = `<span class="font-bold text-accent mr-3">${letter})</span> ${text}`;
+                    btn.innerHTML = `<span class="font-bold text-main mr-3">${letter})</span> ${text}`; 
                     
-                    btn.addEventListener('click', () => selectAlternative(btn, index));
+                    if (alreadyAnswered) {
+                        // Se já foi respondida, DESABILITA o botão e aplica as cores
+                        btn.disabled = true; 
+                        
+                        // Aplica a cor correta E a cor da resposta do usuário
+                        if (letter === correctAnswerLetter) {
+                            btn.classList.add('correct');
+                        } else if (letter === userAnswers[index]) {
+                            btn.classList.add('incorrect');
+                        }
+                    } else {
+                        // Apenas adiciona o listener se não foi respondida
+                        btn.addEventListener('click', () => selectAlternative(btn, index));
+                    }
                     alternativesContainer.appendChild(btn);
                 }
-                i++;
             }
             
+            if (alreadyAnswered) {
+                // Se a questão já foi respondida, configura o feedback e a área de resolução (fechada)
+                setupResolutionFeedback(question, userAnswers[index]);
+            }
 
-            // 5. Reativa o botão "Próxima Questão" e o nomeia corretamente
-            const nextBtn = document.getElementById('next-question-btn');
             if (index === quizData.length - 1) {
                 nextBtn.textContent = "Finalizar Simulado";
             } else {
                 nextBtn.textContent = "Próxima Questão";
             }
-            // Verifica se o usuário já respondeu a questão atual para reabilitar o botão
-            nextBtn.disabled = !userAnswers[index]; 
-
-            // Se for uma questão que já foi respondida, aplica a classe 'selected'
-            if (userAnswers[index]) {
-                const selectedLetter = userAnswers[index];
-                const selectedButton = alternativesContainer.querySelector(`[data-value="${selectedLetter}"]`);
-                if (selectedButton) {
-                    selectedButton.classList.add('selected');
-                }
-            }
+            
+             document.getElementById('question-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         
-        // Função para selecionar uma alternativa
+        // --- FUNÇÃO PARA SELECIONAR ALTERNATIVA (COM BLOQUEIO) ---
         function selectAlternative(selectedBtn, questionIndex) {
             const container = selectedBtn.closest('#alternatives');
             const allBtns = container.querySelectorAll('.alternative-btn');
-            const nextBtn = document.getElementById('next-question-btn');
-
-            // 1. Remove a seleção de todos e aplica no selecionado
-            allBtns.forEach(btn => btn.classList.remove('selected'));
-            selectedBtn.classList.add('selected');
+            const question = quizData[questionIndex];
             
-            // 2. Registra a resposta do usuário
-            userAnswers[questionIndex] = selectedBtn.getAttribute('data-value');
+            // 1. Limpa todas as cores (Garante um estado limpo antes de aplicar o novo)
+            allBtns.forEach(btn => {
+                btn.classList.remove('correct', 'incorrect');
+            });
 
-            // 3. Habilita o botão de navegação
-            nextBtn.disabled = false;
+            const selectedLetter = selectedBtn.getAttribute('data-value');
+            
+            // 2. REGISTRA A NOVA RESPOSTA
+            userAnswers[questionIndex] = selectedLetter; 
+            saveQuizState(); 
+
+            // 3. APLICA AS CORES E HIGHLIGHTS
+            const correctAnswerLetter = question.resposta_correta;
+            const isCorrect = (selectedLetter === correctAnswerLetter);
+
+            if (isCorrect) {
+                selectedBtn.classList.add('correct'); 
+            } else {
+                selectedBtn.classList.add('incorrect'); 
+                
+                // Se incorreto, destaque também a correta para o feedback visual imediato
+                const correctBtn = container.querySelector(`[data-value="${correctAnswerLetter}"]`);
+                if (correctBtn) {
+                    correctBtn.classList.add('correct');
+                }
+            }
+            
+            // ** BLOQUEIO DE RESPOSTA: DESABILITA TODOS OS BOTÕES **
+            allBtns.forEach(btn => {
+                btn.disabled = true;
+            });
+            // ******************************************************
+
+            // 4. CONFIGURA MENSAGEM E BOTÃO DE RESOLUÇÃO
+            setupResolutionFeedback(question, selectedLetter);
+            
+            // 5. HABILITA BOTÃO PRÓXIMO
+            document.getElementById('next-question-btn').disabled = false;
+            
+            // 6. Atualiza o status de Respondida
+            const answerStatusSpan = document.getElementById('answer-status');
+            answerStatusSpan.innerHTML = `
+                <svg class="w-4 h-4 mr-1 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="text-green-400">Respondida</span>
+            `;
+
+            // 7. Scroll suave para mostrar a área de feedback/resolução
+            document.getElementById('immediate-resolution-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // Função para avançar/finalizar
-        document.getElementById('next-question-btn').addEventListener('click', () => {
-            if (currentQuestionIndex < quizData.length - 1) {
-                currentQuestionIndex++;
+        document.getElementById('prev-question-btn').addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
                 loadQuestion(currentQuestionIndex);
                 updateProgress();
-            } else {
-                // Última questão, finalizar o simulado
-                showResults();
             }
         });
 
-        // Função para atualizar a barra de progresso
         function updateProgress() {
             const total = quizData.length;
             const completed = currentQuestionIndex + 1;
@@ -405,73 +862,122 @@
             document.getElementById('progress-text').textContent = `Questão ${completed} de ${total}`;
         }
 
-        // Função para mostrar a tela de resultados
+        document.getElementById('next-question-btn').addEventListener('click', () => {
+            const isEndOfBlock = (currentQuestionIndex + 1) % BLOCK_SIZE === 0;
+
+            if (isEndOfBlock && (currentQuestionIndex + 1) < quizData.length) {
+                showBlockFeedback(currentQuestionIndex);
+            } 
+            else if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+                updateProgress();
+            } else {
+                showResults();
+            }
+        });
+
+        // --- FUNÇÃO DE RESULTADO FINAL (REFORMULADA) ---
         function showResults() {
-            // 1. Esconde a área de questões e mostra a de resultados
+            quizEndTime = performance.now(); // Captura o tempo final
+            clearQuizState();
+            
+            // Calcula o tempo total
+            const totalTimeMs = quizEndTime - quizStartTime;
+            const totalTimeSeconds = Math.round(totalTimeMs / 1000);
+
             document.getElementById('question-area').classList.add('hidden');
             const resultArea = document.getElementById('result-area');
             resultArea.classList.remove('hidden');
             
-            // Força o reflow para a transição de opacidade
             void resultArea.offsetWidth; 
             resultArea.classList.add('opacity-100');
             resultArea.classList.remove('opacity-0');
             
-            // 2. Calcula e exibe o score
             let correctCount = 0;
+            const totalQuestions = quizData.length;
 
             quizData.forEach((q, index) => {
-                // A resposta correta no JSON é uma letra
                 if (userAnswers[index] === q.resposta_correta) {
                     correctCount++;
                 }
             });
+            
+            const percentage = ((correctCount / totalQuestions) * 100).toFixed(0);
 
+            // 1. Ícone
+            document.getElementById('final-header-icon').innerHTML = chartBarIcon;
+            
+            // 2 & 3. Tempo e Acertos
             document.getElementById('final-area-title').textContent = subAreaName;
-            document.getElementById('final-score').textContent = correctCount;
-            document.getElementById('total-questions').textContent = quizData.length;
+            document.getElementById('final-score-display').textContent = `${correctCount} / ${totalQuestions}`;
+            document.getElementById('final-time').textContent = formatTime(totalTimeSeconds);
+            document.getElementById('final-percentage').textContent = `${percentage}%`;
             
-            // Oculta a barra de progresso após o quiz
-            document.getElementById('progress-bar-container').classList.add('hidden');
-            document.getElementById('progress-text').classList.add('hidden');
-        }
-
-        // Função para mostrar a resolução
-        document.getElementById('view-resolution-btn').addEventListener('click', () => {
-            const resolutionDetails = document.getElementById('resolution-details');
-            resolutionDetails.classList.remove('hidden');
+            // 4, 5, 6, 7. Lista de Revisão
+            const reviewListContainer = document.getElementById('final-review-list');
+            let reviewListHtml = '';
             
-            // Injeta os detalhes da resolução
-            const htmlResolutions = quizData.map((q, index) => {
-                const userAnswer = userAnswers[index];
-                const correctAnswerLetter = q.resposta_correta;
-                const isCorrect = (userAnswer === correctAnswerLetter);
-                const userAnswerText = q.alternativas[userAnswer] || "Não respondida";
-                const correctAnswerText = q.alternativas[correctAnswerLetter];
-
-                // Adiciona a imagem se houver
-                const imageHtml = q.imagem_url ? `<div class="w-full max-w-xl mx-auto my-4"><img src="${q.imagem_url}" alt="Imagem da Questão" class="rounded-lg border border-white/10"></div>` : '';
+            quizData.forEach((question, index) => {
+                const userAnswerLetter = userAnswers[index];
+                const correctAnswerLetter = question.resposta_correta;
+                const isCorrect = (userAnswerLetter === correctAnswerLetter);
+                const statusText = isCorrect ? 'ACERTOU' : 'ERROU';
+                const statusColor = isCorrect ? 'text-green-400' : 'text-red-400';
                 
-                return `
-                    <div class="p-6 my-4 rounded-xl border-l-4 ${isCorrect ? 'border-green-500' : 'border-red-500'}" style="background-color: var(--secondary-color);">
-                        <h4 class="text-xl font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'} mb-2">Questão ${index + 1}: ${isCorrect ? 'ACERTOU!' : 'ERROU.'}</h4>
-                        <p class="text-main mb-2">${q.enunciado}</p>
-                        ${imageHtml}
+                // Encontra o texto completo para a correta e a resposta do usuário
+                const userAnswerText = userAnswerLetter ? question.alternativas[userAnswerLetter] : 'Não respondida';
+                const correctAnswerText = question.alternativas[correctAnswerLetter];
+                const borderColor = isCorrect ? 'rgba(40, 167, 69, 0.4)' : 'rgba(220, 53, 69, 0.4)';
+                const containerBorderColor = isCorrect ? 'rgba(40, 167, 69, 0.2)' : 'rgba(220, 53, 69, 0.2)';
+
+                reviewListHtml += `
+                    <div class="review-item">
+                        <button 
+                            id="review-btn-${index}"
+                            data-question-index="${index}"
+                            class="w-full text-left font-bold py-3 px-5 rounded-lg transition duration-300 flex items-center justify-between shadow-md hover:shadow-xl focus:outline-none" 
+                            style="background-color: var(--secondary-color); border: 2px solid ${borderColor};"
+                            onclick="toggleReviewResolution(${index})"
+                        >
+                            <span class="text-lg text-main">Questão ${index + 1} (ID: ${question.id})</span>
+                            <span class="flex items-center font-extrabold ${statusColor}">
+                                ${statusText} 
+                                <svg id="review-icon-${index}" class="w-5 h-5 ml-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </span>
+                        </button>
                         
-                        <p class="text-sm" style="color: var(--cor-texto-secundario);">Sua resposta: <span class="font-bold">${userAnswer || '-'} (${userAnswerText})</span></p>
-                        <p class="text-sm text-green-400 mb-4">Resposta Correta: <span class="font-bold">${correctAnswerLetter} (${correctAnswerText})</span></p>
-                        <div class="p-3 rounded bg-gray-800 text-sm" style="color: var(--cor-texto-secundario);">
-                            <span class="font-bold text-accent">Resolução:</span> ${q.resolucao}
+                        <div id="review-resolution-container-${index}" data-index="${index}" class="transition-all duration-500 overflow-hidden max-h-0">
+                            <div class="p-5 rounded-b text-sm mt-1 border-x border-b" style="background-color: var(--card-bg-color); border-color: ${containerBorderColor};">
+                                
+                                <p class="text-lg text-main font-semibold mb-3">Enunciado:</p>
+                                <p class="text-sm" style="color: var(--cor-texto-secundario);">${question.enunciado}</p>
+
+                                <p class="mt-4 text-sm font-bold text-main">Sua Resposta: <span class="${isCorrect ? 'text-green-400' : 'text-red-400'}">${userAnswerLetter} (${userAnswerText})</span></p>
+                                <p class="text-sm font-bold text-main">Resposta Correta: <span class="text-green-400">${correctAnswerLetter} (${correctAnswerText})</span></p>
+
+                                <div class="mt-4 pt-3 border-t border-white/10">
+                                    <span class="font-bold text-base text-main block mb-2" style="color: var(--button-border-color);">Resolução Detalhada:</span> 
+                                    <p class="text-sm" style="color: var(--cor-texto-secundario);">${question.resolucao}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
-            }).join('');
+            });
+            
+            reviewListContainer.innerHTML = reviewListHtml;
 
-            resolutionDetails.innerHTML = `<h3 class="text-3xl font-bold text-main mb-6 border-b border-white/10 pb-2">Detalhes e Resolução</h3>` + htmlResolutions;
+            // Remove o listener do botão de revisão, já que ele foi removido
+            // document.getElementById('start-review-btn').removeEventListener('click', ...); 
 
-        });
+            document.getElementById('progress-bar-container').classList.add('hidden');
+            document.getElementById('progress-text').classList.add('hidden');
+            
+            // Rola a tela para o topo
+            document.getElementById('result-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
 
-        // Inicia o quiz ao carregar a página
         document.addEventListener('DOMContentLoaded', initializeQuiz);
     </script>
 </body>
