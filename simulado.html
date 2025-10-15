@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulado - Área Selecionada</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         /* --- Variáveis de Cores Reutilizadas do index.html --- */
         :root {
@@ -28,6 +28,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--cor-fundo); 
+            /* Removido o padding geral do body, será aplicado no main content */
         }
         .bg-space { background-color: var(--background-color); }
         .text-main { color: var(--text-color); }
@@ -119,14 +120,15 @@
             padding: 1.5rem;
         }
         
-        /* Estilo do Modal de Feedback do Bloco e Continuação */
+        /* Estilo do Modal de Feedback do Bloco e Continuação e Saída */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9); /* Fundo escuro */
+            /* Fundo escuro quase opaco */
+            background-color: rgba(0, 0, 0, 0.95); 
             z-index: 50; /* Acima de tudo */
             display: flex;
             align-items: center;
@@ -145,14 +147,40 @@
 
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-4 sm:p-12 bg-space overflow-y-auto">
+<body class="min-h-screen flex flex-col items-center bg-space overflow-y-auto">
 
     <div class="gif-background"></div>
 
-    <div class="w-full max-w-4xl z-10"> 
+    <div id="final-result-header" class="w-full hidden z-10" style="background-color: transparent;">
+        <nav class="flex justify-between items-center w-full pt-4 px-4 sm:px-12">
+            <button id="exit-quiz-btn-final" onclick="window.location.href='index.html'" 
+                    class="p-2 rounded-full transition duration-300 hover:bg-white/10" 
+                    title="Voltar ao Menu Principal">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
+                </svg>
+            </button>
+            <div class="text-white font-extrabold text-xl" style="color: #ffffff; font-family: 'Inter', sans-serif;">[ LOGO ]</div>
+        </nav>
+        
+        <hr class="border-t-2 mt-2 border-white">
+    </div>
+    <div id="main-content-container" class="w-full max-w-4xl z-10 pt-8 px-4 sm:px-12"> 
 
-        <header class="text-center mb-8 sm:mb-10 pt-4">
-            <h1 id="quiz-title" class="text-3xl font-bold text-main tracking-wider mb-4">
+        <header id="quiz-header" class="mb-8 sm:mb-10 relative">
+            
+            <div class="flex justify-between items-center mb-4">
+                 <button id="exit-quiz-btn" onclick="showExitConfirmation()" 
+                        class="p-2 rounded-full transition duration-300 hover:bg-white/10" 
+                        title="Voltar ao Menu Principal">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
+                    </svg>
+                </button>
+                <div class="text-white font-extrabold text-xl" style="color: var(--button-border-color); font-family: 'Inter', sans-serif;">[ LOGO ]</div>
+            </div>
+
+            <h1 id="quiz-title" class="text-3xl font-bold text-main tracking-wider mb-4 text-center">
                 Carregando Simulado...
             </h1>
             
@@ -225,99 +253,129 @@
                 Performance Final
             </h2>
             
-            <div class="result-box rounded-xl shadow-2xl p-6 sm:p-10 mb-8">
-                <p class="text-xl text-white mb-4 text-center">Resumo do Simulado de <span id="final-area-title" class="font-bold"></span>:</p>
+            <div class="result-box rounded-xl shadow-2xl p-6 sm:p-10 mb-10 border-2" style="border-color: var(--button-border-color);">
                 
-                <div class="grid grid-cols-3 gap-4 mb-6 text-center">
-                    <div class="p-4 rounded-lg" style="background-color: var(--card-bg-color); border: 1px solid var(--cor-borda);">
+                 <h3 class="text-2xl font-bold text-white mb-6 text-center border-b border-white/10 pb-3">
+                    Resumo do Simulado de <span id="final-area-title" class="font-extrabold" style="color: var(--button-border-color);"></span>
+                </h3>
+
+                <div class="grid grid-cols-3 gap-6 mb-8 text-center">
+                    
+                    <div class="p-4 rounded-lg border-2" style="background-color: var(--secondary-color); border-color: #28a745;">
                         <span class="text-lg font-semibold text-main block mb-1">Acertos</span>
-                        <span id="final-score-display" class="text-3xl font-extrabold text-green-400">0 / 0</span>
+                        <span id="final-score-display" class="text-4xl font-extrabold text-green-400">0 / 0</span>
                     </div>
                     
-                    <div class="p-4 rounded-lg" style="background-color: var(--card-bg-color); border: 1px solid var(--cor-borda);">
+                    <div class="p-4 rounded-lg border-2" style="background-color: var(--secondary-color); border-color: var(--button-border-color);">
                         <span class="text-lg font-semibold text-main block mb-1">Tempo Total</span>
-                        <span id="final-time" class="text-2xl font-extrabold" style="color: var(--button-border-color);">0 min 0 seg</span>
+                        <span id="final-time" class="text-3xl font-extrabold" style="color: var(--button-border-color);">0 min 0 seg</span>
                     </div>
 
-                    <div class="p-4 rounded-lg" style="background-color: var(--card-bg-color); border: 1px solid var(--cor-borda);">
+                    <div class="p-4 rounded-lg border-2" style="background-color: var(--secondary-color); border-color: #f7d04f;">
                         <span class="text-lg font-semibold text-main block mb-1">Aproveitamento</span>
-                        <span id="final-percentage" class="text-2xl font-extrabold text-white">0%</span>
+                        <span id="final-percentage" class="text-4xl font-extrabold text-yellow-400">0%</span>
                     </div>
                 </div>
 
-                <div class="text-center mt-6">
+                <div class="text-center mt-6 pt-6 border-t border-white/10">
                     <button onclick="window.location.href='index.html'" class="bg-red-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-red-800">
                         Voltar para o Menu Inicial
                     </button>
                 </div>
             </div>
 
-            <h3 class="text-2xl font-bold text-main mb-4 border-b border-white/10 pb-2">Revisão Detalhada</h3>
+            <h3 class="text-2xl font-bold text-main mb-4 border-b border-white/10 pb-2">Revisão Detalhada das Questões</h3>
             <div id="final-review-list" class="space-y-3">
                 </div>
             
         </section>
+        
+        <div id="exit-confirmation-modal" class="modal-overlay hidden">
+            <div class="bg-card-bg-color rounded-xl p-8 sm:p-10 w-full max-w-lg mx-4 shadow-2xl border" style="border-color: var(--button-border-color);">
+                <h3 class="text-3xl font-bold text-main mb-4 text-center">
+                    <svg class="w-8 h-8 inline-block mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.332 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    Deseja Sair do Simulado?
+                </h3>
+                <p class="text-lg text-center mb-8" style="color: var(--cor-texto-secundario);">
+                    Escolha uma das opções abaixo para gerenciar seu progresso.
+                </p>
 
-    </div>
-    
-    <div id="block-feedback-modal" class="modal-overlay hidden">
-        <div class="bg-card-bg-color rounded-xl p-8 sm:p-10 w-full max-w-lg mx-4 shadow-2xl border" style="border-color: var(--button-border-color);">
-            <h3 class="text-3xl font-bold text-main mb-6 text-center flex items-center justify-center">
-                <svg class="w-8 h-8 mr-3 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                </svg>
-                Relatório de Bloco <span id="block-number">1</span>
-            </h3>
-
-            <div class="space-y-4 mb-6 border-b border-white/10 pb-6">
-                <div class="flex justify-between items-center p-4 rounded-lg" style="background-color: var(--secondary-color);">
-                    <span class="text-xl font-semibold text-main">Acertos:</span>
-                    <span id="block-score" class="text-3xl font-extrabold text-green-400">0 de 10 (0%)</span> 
+                <div class="flex flex-col sm:flex-row-reverse justify-between space-y-4 sm:space-y-0">
+                    <button id="cancel-exit-btn" onclick="hideExitConfirmation()" 
+                            class="w-full sm:w-1/2 text-white font-bold py-3 px-8 rounded-full transition duration-300 border-2 hover:opacity-80" 
+                            style="background-color: var(--button-border-color); border-color: var(--button-border-color);">
+                        Continuar
+                    </button>
+                    <button id="confirm-exit-btn" onclick="confirmExit()" 
+                            class="w-full sm:w-1/2 bg-gray-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-gray-700 sm:mr-4">
+                        Salvar e Sair
+                    </button>
                 </div>
-                
-                <div class="flex justify-between items-center p-4 rounded-lg" style="background-color: var(--secondary-color);">
-                    <span class="text-xl font-semibold text-main">Tempo Total Gasto:</span>
-                    <span id="block-time" class="text-2xl font-extrabold" style="color: var(--button-border-color);">0 min 0 seg</span>
-                </div>
-            </div>
-
-            <p class="text-center text-lg font-semibold mb-4" style="color: var(--cor-texto-secundario);">Análise de Produtividade:</p>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="p-4 rounded-lg text-center" style="background-color: var(--secondary-color);">
-                    <span class="text-sm font-semibold text-main block mb-1">Taxa de Erro:</span>
-                    <span id="block-error-rate" class="text-xl font-extrabold text-white">Baixa</span>
-                </div>
-
-                <div class="p-4 rounded-lg text-center" style="background-color: var(--secondary-color);">
-                    <span class="text-sm font-semibold text-main block mb-1">Velocidade (Média):</span>
-                    <span id="block-time-classification" class="text-xl font-extrabold text-white">Bom</span>
-                </div>
-            </div>
-
-            <button id="continue-quiz-btn" class="mt-8 w-full bg-button-border-color text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-button-active-bg" style="background-color: var(--button-border-color);">
-                Continuar Simulado
-            </button>
-        </div>
-    </div>
-    
-    <div id="continue-modal" class="modal-overlay hidden">
-        <div class="bg-card-bg-color rounded-xl p-8 sm:p-10 w-full max-w-lg mx-4 shadow-2xl border" style="border-color: var(--button-border-color);">
-            <h3 class="text-3xl font-bold text-main mb-4 text-center">
-                Continuar Simulado?
-            </h3>
-            <p class="text-lg text-center mb-6" style="color: var(--cor-texto-secundario);">
-                Encontramos um progresso salvo no tópico <span id="saved-topic-display" class="font-bold"></span>. Você parou na Questão <span id="saved-question-number" class="font-bold"></span>.
-            </p>
-
-            <div class="flex justify-between space-x-4">
-                <button id="restart-quiz-btn" class="w-1/2 bg-gray-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-gray-700">
-                    Reiniciar (Apagar Progresso)
-                </button>
-                <button id="continue-saved-quiz-btn" class="w-1/2 bg-green-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-green-700">
-                    Continuar
-                </button>
             </div>
         </div>
+        <div id="block-feedback-modal" class="modal-overlay hidden">
+            <div class="bg-card-bg-color rounded-xl p-8 sm:p-10 w-full max-w-lg mx-4 shadow-2xl border" style="border-color: var(--button-border-color);">
+                <h3 class="text-3xl font-bold text-main mb-6 text-center flex items-center justify-center">
+                    <svg class="w-8 h-8 mr-3 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    Relatório de Performance
+                </h3>
+
+                <div class="space-y-4 mb-6 border-b border-white/10 pb-6">
+                    <div class="flex justify-between items-center p-4 rounded-lg" style="background-color: var(--secondary-color);">
+                        <span class="text-xl font-semibold text-main">Acertos:</span>
+                        <span id="block-score" class="text-3xl font-extrabold text-green-400">0 de 10 (0%)</span> 
+                    </div>
+                    
+                    <div class="flex justify-between items-center p-4 rounded-lg" style="background-color: var(--secondary-color);">
+                        <span class="text-xl font-semibold text-main">Tempo Total Gasto:</span>
+                        <span id="block-time" class="text-2xl font-extrabold" style="color: var(--button-border-color);">0 min 0 seg</span>
+                    </div>
+                </div>
+
+                <p class="text-center text-lg font-semibold mb-4" style="color: var(--cor-texto-secundario);">Análise de Produtividade do Bloco:</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 rounded-lg text-center" style="background-color: var(--secondary-color);">
+                        <span class="text-sm font-semibold text-main block mb-1">Taxa de Erro:</span>
+                        <span id="block-error-rate" class="text-xl font-extrabold text-white">Baixa</span>
+                    </div>
+
+                    <div class="p-4 rounded-lg text-center" style="background-color: var(--secondary-color);">
+                        <span class="text-sm font-semibold text-main block mb-1">Velocidade (Média):</span>
+                        <span id="block-time-classification" class="text-xl font-extrabold text-white">Bom</span>
+                    </div>
+                </div>
+
+                <button id="continue-quiz-btn" class="mt-8 w-full bg-button-border-color text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-button-active-bg" style="background-color: var(--button-border-color);">
+                    Continuar Simulado
+                </button>
+            </div>
+        </div>
+        
+        <div id="continue-modal" class="modal-overlay hidden">
+            <div class="bg-card-bg-color rounded-xl p-8 sm:p-10 w-full max-w-lg mx-4 shadow-2xl border" style="border-color: var(--button-border-color);">
+                <h3 class="text-3xl font-bold text-main mb-4 text-center">
+                    Continuar Simulado?
+                </h3>
+                <p class="text-lg text-center mb-6" style="color: var(--cor-texto-secundario);">
+                    Encontramos um progresso salvo no tópico <span id="saved-topic-display" class="font-bold text-white"></span>. Você parou na Questão <span id="saved-question-number" class="font-bold text-white"></span>.
+                </p>
+
+                <div class="flex flex-col sm:flex-row-reverse justify-between space-y-4 sm:space-y-0">
+                    <button id="continue-saved-quiz-btn" 
+                            class="w-full sm:w-1/2 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:opacity-90"
+                            style="background-color: var(--button-border-color);">
+                        Continuar
+                    </button>
+                    <button id="restart-quiz-btn" 
+                            class="w-full sm:w-1/2 bg-gray-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 hover:bg-gray-700 sm:mr-4">
+                        Reiniciar
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 <script>
@@ -369,6 +427,9 @@
             };
             
             try {
+                // Remove o estado se o quiz estiver completo, caso contrário, salva.
+                // Mas, como o usuário pode querer continuar mesmo se estiver completo
+                // (para ver o resultado), vamos salvar sempre e deixar a lógica de checagem.
                 localStorage.setItem(key, JSON.stringify(state));
             } catch (e) {
                 console.error("Não foi possível salvar o estado no localStorage", e);
@@ -447,7 +508,10 @@
                     const state = JSON.parse(savedState);
                     const savedIndex = state.lastQuestionIndex;
                     
-                    if (state.answers.length === quizData.length && savedIndex < quizData.length) {
+                    // Validação de estado: Deve ter a lista de respostas e um índice válido.
+                    const isStateValid = state.answers && state.answers.length === quizData.length && savedIndex < quizData.length;
+
+                    if (isStateValid) {
                         
                         document.getElementById('saved-topic-display').textContent = subarea;
                         document.getElementById('saved-question-number').textContent = savedIndex + 1;
@@ -473,14 +537,15 @@
                             quizStartTime = performance.now(); // Inicia novo tempo
                             blockStartTime = performance.now();
                             
-                            // Reincia userAnswers e carrega a primeira questão
-                            userAnswers = new Array(quizData.length);
+                            // *** CORREÇÃO: Inicializa com null para evitar que sparse array seja lido como respondido ***
+                            userAnswers = new Array(quizData.length).fill(null);
                             loadQuestion(0);
                             updateProgress();
                         };
                         
                         return;
                     } else {
+                        // Estado inválido (por exemplo, tamanho do quiz mudou), limpa.
                         clearQuizState();
                     }
                 } catch (e) {
@@ -489,10 +554,11 @@
                 }
             }
             
-            // Inicia do zero se não houver estado salvo
-            userAnswers = new Array(quizData.length);
+            // Inicia do zero se não houver estado salvo ou se o estado for inválido
             quizStartTime = performance.now(); // Inicia tempo
             blockStartTime = performance.now();
+            // *** CORREÇÃO: Inicializa com null para evitar que sparse array seja lido como respondido ***
+            userAnswers = new Array(quizData.length).fill(null);
             loadQuestion(0);
             updateProgress();
         }
@@ -509,11 +575,10 @@
             </svg>
         `;
 
-        // Ícone de Gráfico de Barras (Mais profissional para performance)
-        const chartBarIcon = `
-            <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.055l3.414 3.414a1 1 0 01.293.707V12l-1.92 1.92M21 12a9 9 0 00-18 0"></path>
+        // NOVO: Ícone de Selo de Qualidade / Checkmark Shield (mais profissional)
+        const achievementIcon = `
+            <svg class="w-10 h-10 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.416A11.955 11.955 0 0112 2.944c-1.258 0-2.515.155-3.757.456M2.944 12c0 2.87 1.15 5.518 3.036 7.404L12 21.056l6.02-1.652A11.955 11.955 0 0121.056 12c0-2.87-1.15-5.518-3.036-7.404L12 2.944l-6.02 1.652A11.955 11.955 0 012.944 12z"></path>
             </svg>
         `;
         
@@ -523,6 +588,24 @@
             return `${minutes} min ${seconds} seg`;
         }
         
+        // --- FUNÇÕES DE NAVEGAÇÃO / SAÍDA (ADICIONADAS) ---
+        function showExitConfirmation() {
+            // Garante que o estado atual seja salvo antes de sair
+            saveQuizState();
+            document.getElementById('exit-confirmation-modal').classList.remove('hidden');
+        }
+
+        function hideExitConfirmation() {
+            document.getElementById('exit-confirmation-modal').classList.add('hidden');
+        }
+
+        function confirmExit() {
+            // Navega para o index.html (seu progresso já foi salvo)
+            window.location.href = 'index.html';
+        }
+        // --- FIM FUNÇÕES DE NAVEGAÇÃO / SAÍDA ---
+
+
         // --- FUNÇÃO PARA ABRIR/FECHAR RESOLUÇÃO DA QUESTÃO ATUAL ---
         function toggleResolution() {
             const resolutionContainer = document.getElementById('resolution-text-container');
@@ -578,6 +661,12 @@
             const resolutionContainer = document.getElementById('resolution-text-container');
             const toggleButton = document.getElementById('toggle-resolution-btn');
             const toggleIcon = document.getElementById('resolution-toggle-icon');
+            
+            // Só exibe feedback se o usuário realmente respondeu a questão (userAnswerLetter !== null)
+            if (userAnswerLetter === null) {
+                resolutionArea.classList.add('hidden');
+                return;
+            }
 
             const correctAnswerLetter = question.resposta_correta;
             const isCorrect = (userAnswerLetter === correctAnswerLetter);
@@ -662,7 +751,10 @@
             });
 
             const modal = document.getElementById('block-feedback-modal');
-            document.getElementById('block-number').textContent = blockResults.length;
+            
+            // A ID do bloco foi removida do HTML, mas a lógica de cálculo continua aqui
+            // document.getElementById('block-number').textContent = blockResults.length; 
+            
             document.getElementById('block-score').textContent = `${correctCount} de ${BLOCK_SIZE} (${(correctCount / BLOCK_SIZE * 100).toFixed(0)}%)`;
             document.getElementById('block-time').textContent = formatTime(timeTakenSeconds);
             document.getElementById('block-error-rate').textContent = errorRateClassification;
@@ -716,7 +808,8 @@
             const alternativesContainer = document.getElementById('alternatives');
             alternativesContainer.innerHTML = ''; 
             const letters = ['A', 'B', 'C', 'D', 'E'];
-            const alreadyAnswered = userAnswers[index] !== undefined; 
+            // *** CORREÇÃO AQUI: Agora verifica se o valor é estritamente diferente de null ***
+            const alreadyAnswered = userAnswers[index] !== null; 
             const nextBtn = document.getElementById('next-question-btn');
             const prevBtn = document.getElementById('prev-question-btn');
             const resolutionArea = document.getElementById('immediate-resolution-area');
@@ -863,6 +956,12 @@
         }
 
         document.getElementById('next-question-btn').addEventListener('click', () => {
+            // **IMPORTANTE**: Só avança se a questão atual tiver sido respondida (userAnswers[currentQuestionIndex] !== null)
+            if (userAnswers[currentQuestionIndex] === null) {
+                alert("Por favor, selecione uma alternativa antes de avançar.");
+                return;
+            }
+
             const isEndOfBlock = (currentQuestionIndex + 1) % BLOCK_SIZE === 0;
 
             if (isEndOfBlock && (currentQuestionIndex + 1) < quizData.length) {
@@ -886,7 +985,15 @@
             const totalTimeMs = quizEndTime - quizStartTime;
             const totalTimeSeconds = Math.round(totalTimeMs / 1000);
 
+            // 1. Esconde a área de questão
             document.getElementById('question-area').classList.add('hidden');
+            
+            // 2. Esconde o cabeçalho do quiz
+            document.getElementById('quiz-header').classList.add('hidden');
+            
+            // 3. Mostra o novo cabeçalho da performance final (full-width, scrollable)
+            document.getElementById('final-result-header').classList.remove('hidden');
+
             const resultArea = document.getElementById('result-area');
             resultArea.classList.remove('hidden');
             
@@ -905,31 +1012,34 @@
             
             const percentage = ((correctCount / totalQuestions) * 100).toFixed(0);
 
-            // 1. Ícone
-            document.getElementById('final-header-icon').innerHTML = chartBarIcon;
+            // 4. Ícone
+            document.getElementById('final-header-icon').innerHTML = achievementIcon;
             
-            // 2 & 3. Tempo e Acertos
+            // 5 & 6. Tempo e Acertos
             document.getElementById('final-area-title').textContent = subAreaName;
             document.getElementById('final-score-display').textContent = `${correctCount} / ${totalQuestions}`;
             document.getElementById('final-time').textContent = formatTime(totalTimeSeconds);
             document.getElementById('final-percentage').textContent = `${percentage}%`;
             
-            // 4, 5, 6, 7. Lista de Revisão
+            // 7. Lista de Revisão
             const reviewListContainer = document.getElementById('final-review-list');
             let reviewListHtml = '';
             
             quizData.forEach((question, index) => {
                 const userAnswerLetter = userAnswers[index];
                 const correctAnswerLetter = question.resposta_correta;
-                const isCorrect = (userAnswerLetter === correctAnswerLetter);
-                const statusText = isCorrect ? 'ACERTOU' : 'ERROU';
-                const statusColor = isCorrect ? 'text-green-400' : 'text-red-400';
+                // A questão só é considerada 'respondida' se userAnswerLetter for diferente de null
+                const isAnswered = userAnswerLetter !== null; 
+                const isCorrect = isAnswered && (userAnswerLetter === correctAnswerLetter);
+                
+                const statusText = isAnswered ? (isCorrect ? 'ACERTOU' : 'ERROU') : 'NÃO RESPONDEU';
+                const statusColor = isAnswered ? (isCorrect ? 'text-green-400' : 'text-red-400') : 'text-gray-400';
                 
                 // Encontra o texto completo para a correta e a resposta do usuário
-                const userAnswerText = userAnswerLetter ? question.alternativas[userAnswerLetter] : 'Não respondida';
+                const userAnswerText = isAnswered ? question.alternativas[userAnswerLetter] : 'Não respondida';
                 const correctAnswerText = question.alternativas[correctAnswerLetter];
-                const borderColor = isCorrect ? 'rgba(40, 167, 69, 0.4)' : 'rgba(220, 53, 69, 0.4)';
-                const containerBorderColor = isCorrect ? 'rgba(40, 167, 69, 0.2)' : 'rgba(220, 53, 69, 0.2)';
+                const borderColor = isAnswered ? (isCorrect ? 'rgba(40, 167, 69, 0.4)' : 'rgba(220, 53, 69, 0.4)') : 'rgba(255, 255, 255, 0.1)';
+                const containerBorderColor = isAnswered ? (isCorrect ? 'rgba(40, 167, 69, 0.2)' : 'rgba(220, 53, 69, 0.2)') : 'rgba(255, 255, 255, 0.08)';
 
                 reviewListHtml += `
                     <div class="review-item">
@@ -953,7 +1063,7 @@
                                 <p class="text-lg text-main font-semibold mb-3">Enunciado:</p>
                                 <p class="text-sm" style="color: var(--cor-texto-secundario);">${question.enunciado}</p>
 
-                                <p class="mt-4 text-sm font-bold text-main">Sua Resposta: <span class="${isCorrect ? 'text-green-400' : 'text-red-400'}">${userAnswerLetter} (${userAnswerText})</span></p>
+                                <p class="mt-4 text-sm font-bold text-main">Sua Resposta: <span class="${statusColor}">${userAnswerLetter || 'N/A'} (${userAnswerText})</span></p>
                                 <p class="text-sm font-bold text-main">Resposta Correta: <span class="text-green-400">${correctAnswerLetter} (${correctAnswerText})</span></p>
 
                                 <div class="mt-4 pt-3 border-t border-white/10">
@@ -968,14 +1078,12 @@
             
             reviewListContainer.innerHTML = reviewListHtml;
 
-            // Remove o listener do botão de revisão, já que ele foi removido
-            // document.getElementById('start-review-btn').removeEventListener('click', ...); 
-
+            // Esconde os elementos de progresso remanescentes
             document.getElementById('progress-bar-container').classList.add('hidden');
             document.getElementById('progress-text').classList.add('hidden');
             
-            // Rola a tela para o topo
-            document.getElementById('result-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Rola a tela para o topo, para mostrar o novo cabeçalho
+            document.getElementById('final-result-header').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         document.addEventListener('DOMContentLoaded', initializeQuiz);
