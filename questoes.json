@@ -6,7 +6,7 @@
                     "id": 136,
                     "fonte": "ENEM",
                     "enunciado": "Contratos de vários serviços disponíveis na internet apresentam uma quantidade excessiva de informações. Isso faz com que o tempo necessário para a leitura desses contratos possa ser longo. O quadro apresenta uma amostra do tempo considerado necessário para a leitura completa do contrato de alguns serviços digitais. O tempo médio, em minuto, necessário para a leitura completa de um contrato de serviço dentre os listados no quadro é, com uma casa decimal, aproximadamente,",
-                    "imagem_url": "mat_q136_tabela.jpeg",
+                    "imagem_url": "img/questoes/foto1.jpg",
                     "alternativas": {
                         "A": "13,0.",
                         "B": "15,0.",
@@ -21,7 +21,7 @@
                     "id": 137,
                     "fonte": "ENEM",
                     "enunciado": "Um proprietário pretende instalar um sensor de presença para a proteção de seu imóvel. O sensor deverá detectar movimentos de objetos e pessoas numa determinada região plana. A figura ilustra a vista superior da área de cobertura (setor circular em azul) de um sensor colocado no ponto S. Essa área depende da medida do ângulo α, em grau, e do raio R, em metro. Ao aumentar o ângulo α ou o raio R aumenta-se a área de cobertura do sensor. Entretanto, quanto maior essa área, maior o preço do sensor. Para esse fim, há cinco tipos de sensores disponíveis no mercado, cada um com as seguintes características: tipo I: α = 15° ° e R = 20 m; tipo II: α = 30° ° e R = 22 m; tipo III: α = 40° ° e R = 12 m; tipo IV: α = 60° ° e R = 16 m; tipo V: α = 90° ° e R = 10 m. Esse proprietário pretende adquirir um desses sensores que seja capaz de cobrir, no mínimo, uma área de medida 70 m², com o menor preço possível. Use 3 como valor aproximado para π. O proprietário do imóvel deverá adquirir o sensor do tipo",
-                    "imagem_url": "mat_q137_figura.jpeg",
+                    "imagem_url": "img/questoes/foto2.jpg",
                     "alternativas": {
                         "A": "I.",
                         "B": "II.",
@@ -51,7 +51,7 @@
                     "id": 139,
                     "fonte": "ENEM",
                     "enunciado": "Uma sala com piso no formato retangular, com lados de medidas 3 m e 6 m, será dividida em dois ambientes. Para isso, serão utilizadas colunas em formato cilíndrico, dispostas perpendicularmente ao piso e representadas na figura pelos círculos de cor azul. Os centros desses círculos estarão sobre uma reta paralela aos lados de menor medida do piso da sala. Os vãos entre duas colunas e entre uma coluna e a parede não poderão ser superiores a 15 cm. Para efetuar a compra dessas colunas, foram feitos orçamentos com base em dados fornecidos por cinco lojas. A compra será realizada na loja cujo orçamento resulte no menor valor total possível. A compra será realizada na loja",
-                    "imagem_url": "mat_q139_figura_e_tabela.jpeg",
+                    "imagem_url": "img/questoes/foto3.jpg",
                     "alternativas": {
                         "A": "I.",
                         "B": "II.",
@@ -81,7 +81,7 @@
                     "id": 141,
                     "fonte": "ENEM",
                     "enunciado": "O gráfico apresenta o valor total de exportações e o valor total de importações, ao longo de um período, em bilhão de dólares. O saldo da balança comercial brasileira é dado pelo valor total de exportações menos o valor total de importações num mesmo período. Considere que os saldos da balança comercial brasileira, nos três meses destacados no gráfico, sejam representados por: S1: saldo em junho de 2009; S2: saldo em janeiro de 2010; S3: saldo em junho de 2010. A ordenação dos saldos S1, S2 e S3, do maior para o menor, é",
-                    "imagem_url": "mat_q141_grafico.jpeg",
+                    "imagem_url": "img/questoes/foto5.jpg",
                     "alternativas": {
                         "A": "S1, S3 e S2.",
                         "B": "S2, S1 e S3.",
@@ -126,7 +126,7 @@
                     "id": 144,
                     "fonte": "ENEM",
                     "enunciado": "Uma professora de matemática utiliza em suas aulas uma “máquina caça-números” para verificar os conhecimentos de seus estudantes sobre representações de números racionais. Essa máquina tem um visor dividido em seis compartimentos e, na lateral, uma alavanca. Cada estudante puxa a alavanca e espera que os compartimentos parem de girar. A partir daí, precisa responder para a professora em quais posições se encontram os números que representam a mesma quantidade. Um estudante puxou a alavanca, aguardou que os compartimentos parassem de girar e observou os números apresentados no visor. A configuração da máquina naquele instante está apresentada na imagem. Esse estudante respondeu corretamente à pergunta da professora. As posições indicadas pelo estudante foram",
-                    "imagem_url": "mat_q144_caca_numeros.jpeg",
+                    "imagem_url": "img/questoes/foto6.jpg",
                     "alternativas": {
                         "A": "I, II e IV.",
                         "B": "II, IV e V.",
@@ -141,7 +141,7 @@
                     "id": 145,
                     "fonte": "ENEM",
                     "enunciado": "Uma caneca com água fervendo é retirada de um forno de micro-ondas. A temperatura T, em grau Celsius, da caneca, em função do tempo t, em minuto, pode ser modelada pela função T(t) = a + 80bt, representada no gráfico a seguir. Os valores das constantes a e b são",
-                    "imagem_url": "mat_q145_grafico_temperatura.jpeg",
+                    "imagem_url": "img/questoes/foto7.jpg",
                     "alternativas": {
                         "A": "a = 20; b = log(0,5)",
                         "B": "a = 100; b = 0,5",
@@ -170,8 +170,8 @@
                 {
                     "id": 147,
                     "fonte": "ENEM",
-                    "enunciado": "Uma criança, utilizando um aplicativo, escreveu uma mensagem para enviar a um amigo. Essa mensagem foi escrita seguindo estas etapas: A criança seguiu copiando e colando, em cada etapa, o que tinha no visor na etapa imediatamente anterior, até concluir a 20ª etapa. Em seguida, enviou a mensagem. Qual foi o total de figuras contidas na mensagem enviada? **(Nota: A imagem das etapas não foi fornecida, o texto do enunciado deve descrevê-las para resolver a questão. Assumindo a sequência é: Inicia com X figuras, na Etapa 1, cola (dobra o total), etc.)**",
-                    "imagem_url": "mat_q147_etapas.jpeg", 
+                    "enunciado": "Uma criança, utilizando um aplicativo, escreveu uma mensagem para enviar a um amigo. Essa mensagem foi escrita seguindo estas etapas: A criança seguiu copiando e colando, em cada etapa, o que tinha no visor na etapa imediatamente anterior, até concluir a 20ª etapa. Em seguida, enviou a mensagem. Qual foi o total de figuras contidas na mensagem enviada? (Nota: A imagem das etapas não foi fornecida, o texto do enunciado deve descrevê-las para resolver a questão. Assumindo a sequência é: Inicia com X figuras, na Etapa 1, cola (dobra o total), etc.)",
+                    "imagem_url": "img/questoes/foto8.jpg", 
                     "alternativas": {
                         "A": "3 × 2¹⁹",
                         "B": "3 × 2²⁰",
@@ -201,7 +201,7 @@
                     "id": 149,
                     "fonte": "ENEM",
                     "enunciado": "Para obter um sólido de revolução (rotação de 360° em torno de um eixo fixo), uma professora realizou as seguintes etapas: recortou o trapézio retângulo PQRS de um material rígido; afixou o lado PS do trapézio em uma vareta fixa retilínea (eixo de rotação); girou o trapézio 360° em torno da vareta e obteve um sólido de revolução. Observe a figura que apresenta o trapézio afixado na vareta e o sentido de giro. O sólido obtido foi um(a)",
-                    "imagem_url": "mat_q149_solido.jpeg",
+                    "imagem_url": "img/questoes/foto9.jpg",
                     "alternativas": {
                         "A": "cone.",
                         "B": "cilindro.",
@@ -231,7 +231,7 @@
                     "id": 151,
                     "fonte": "ENEM",
                     "enunciado": "Um artesão utiliza dois tipos de componentes, X e Y, nos enfeites que produz. Ele sempre compra todos os componentes em uma mesma loja. O quadro apresenta os preços dos dois tipos de componentes nas lojas I e II. Ele confeccionará enfeites formados por duas unidades do componente X e uma unidade do componente Y e efetuará a compra na loja que oferecer o menor valor total para a confecção de um enfeite. O artesão efetuará a compra na loja",
-                    "imagem_url": "mat_q151_tabela.jpeg",
+                    "imagem_url": "img/questoes/foto10.jpg",
                     "alternativas": {
                         "A": "I, pois o valor é R$ 7,00.",
                         "B": "I, pois o valor é R$ 4,00.",
@@ -261,7 +261,7 @@
                     "id": 153,
                     "fonte": "ENEM",
                     "enunciado": "Três grandezas (I, II e III) se relacionam entre si. Os gráficos a seguir, formados por segmentos de reta, descrevem as relações de dependência existentes entre as grandezas I e II, e entre as grandezas II e III. O valor máximo assumido pela grandeza III, quando a grandeza I varia de 1 a 3, é",
-                    "imagem_url": "mat_q153_graficos.jpeg",
+                    "imagem_url": "img/questoes/foto11.jpg",
                     "alternativas": {
                         "A": "1,0.",
                         "B": "2,5.",
@@ -276,7 +276,7 @@
                     "id": 154,
                     "fonte": "ENEM",
                     "enunciado": "O tamanho mínimo que a visão humana é capaz de visualizar sem o uso de equipamento auxiliar é equivalente a 100 micrômetros (1 micrômetro = 10⁻³ milímetros). Uma estudante pretende visualizar e analisar hemácias do sangue humano, que medem 0,007 mm de diâmetro. Ela adquiriu um microscópio óptico que tem uma lente ocular que amplia em 10 vezes a imagem do objeto em observação, e um conjunto de lentes objetivas com estas capacidades de ampliação: lente I: 2 vezes; lente II: 10 vezes; lente III: 15 vezes; lente IV: 1,1 vez; lente V: 1,4 vez. O funcionamento desse microscópio permite o uso da lente ocular sozinha ou a combinação dela com uma de suas lentes objetivas, proporcionando, nesse caso, um aumento de sua capacidade de ampliação final, que é dada pelo produto entre as capacidades de ampliação da ocular e da objetiva. Essa estudante pretende selecionar a lente objetiva de menor capacidade de ampliação que permita, na combinação com a ocular, visualizar hemácias do sangue humano. A lente objetiva a ser selecionada pela estudante é a",
-                    "imagem_url": "", 
+                    "imagem_url": "img/questoes/foto12.jpg", 
                     "alternativas": {
                         "A": "I.",
                         "B": "II.",
@@ -306,7 +306,7 @@
                     "id": 156,
                     "fonte": "ENEM",
                     "enunciado": "Para abrir a porta de uma empresa, cada funcionário deve cadastrar uma senha utilizando um teclado alfanumérico como o representado na figura. Por exemplo: a tecla que contém o número 2 traz as letras correlacionadas A, B e C. Cada toque nessa tecla mostra, sequencialmente, os seguintes caracteres: 2, A, B e C. Para os próximos toques, essa sequência se repete. As demais teclas funcionam da mesma maneira. As senhas a serem cadastradas pelos funcionários devem conter 5 caracteres, sendo 2 algarismos distintos seguidos de 3 letras diferentes, nessa ordem. Um funcionário irá cadastrar a sua primeira senha, podendo escolher entre as teclas que apresentam os números 1, 2, 5, 7 e 0 e as respectivas letras correlacionadas, quando houver. O número de possibilidades diferentes que esse funcionário tem para cadastrar sua senha é",
-                    "imagem_url": "mat_q156_teclado.jpeg",
+                    "imagem_url": "img/questoes/foto13.jpg",
                     "alternativas": {
                         "A": "11 520.",
                         "B": "14 400.",
@@ -321,7 +321,7 @@
                     "id": 157,
                     "fonte": "ENEM",
                     "enunciado": "Em uma loja de defensivos agrícolas, os preços de alguns produtos foram divulgados em um cartaz. Sabe-se que 1 litro de defensivo do Tipo A é suficiente para aplicação em 0,5 hectare (ha), enquanto que 1 litro de defensivo do Tipo B é suficiente para aplicação em 0,4 ha. Um agricultor precisa comprar, nessa loja, uma quantidade de litros de defensivo suficiente para aplicar em uma área de 20 ha, além de levar uma máscara para aplicação. O valor mínimo, em real, a ser gasto pelo agricultor é",
-                    "imagem_url": "mat_q157_cartaz.jpeg",
+                    "imagem_url": "img/questoes/foto16.jpg",
                     "alternativas": {
                         "A": "147,00.",
                         "B": "150,00.",
@@ -381,7 +381,7 @@
                     "id": 161,
                     "fonte": "ENEM",
                     "enunciado": "Uma empresa produz mochilas escolares sob encomenda. Essa empresa tem um custo total de produção, composto por um custo fixo, que não depende do número de mochilas, mais um custo variável, que é proporcional ao número de mochilas produzidas. O custo total cresce de forma linear, e a tabela apresenta esse custo para três quantidades de mochilas produzidas. O custo total, em real, para a produção de 80 mochilas será",
-                    "imagem_url": "mat_q161_tabela.jpeg",
+                    "imagem_url": "img/questoes/foto17.jpg",
                     "alternativas": {
                         "A": "2 400,00.",
                         "B": "2 520,00.",
@@ -396,7 +396,7 @@
                     "id": 162,
                     "fonte": "ENEM",
                     "enunciado": "A umidade relativa do ar é um dos indicadores utilizados na meteorologia para fazer previsões sobre o clima. O quadro apresenta as médias mensais, em porcentagem, da umidade relativa do ar em um período de seis meses consecutivos em uma cidade. Nessa cidade, a mediana desses dados, em porcentagem, da umidade relativa do ar no período considerado foi",
-                    "imagem_url": "mat_q162_quadro.jpeg",
+                    "imagem_url": "img/questoes/foto18.jpg",
                     "alternativas": {
                         "A": "56.",
                         "B": "58.",
@@ -441,7 +441,7 @@
                     "id": 165,
                     "fonte": "ENEM",
                     "enunciado": "Uma indústria faz uma parceria com uma distribuidora de sucos para lançar no mercado dois tipos de embalagens. Para a fabricação dessas embalagens, a indústria dispõe de folhas de alumínio retangulares, de dimensões 10 cm por 20 cm. Cada uma dessas folhas é utilizada para formar a superfície lateral da embalagem, em formato de cilindro circular reto, que posteriormente recebe fundo e tampa circulares. A figura ilustra, dependendo de qual das duas extensões será utilizada como altura, as duas opções para formar a possível embalagem. Dentre essas duas embalagens, a de maior capacidade apresentará volume, em centímetro cúbico, igual a",
-                    "imagem_url": "mat_q165_figura.jpeg",
+                    "imagem_url": "img/questoes/foto19.jpg",
                     "alternativas": {
                         "A": "4 000 π",
                         "B": "2 000 π",
@@ -456,7 +456,7 @@
                     "id": 166,
                     "fonte": "ENEM",
                     "enunciado": "As receitas anuais obtidas por uma indústria no período de 2014 a 2021, em milhão de reais, foram registradas, por pontos, em um gráfico. Nele, também está representada a reta que descreve a tendência de evolução das receitas. Essa reta pode ser utilizada para estimar as receitas dos anos seguintes. A estimativa da receita, em milhão de reais, dessa indústria, para o ano de 2026, obtida a partir dessa reta de tendência, é",
-                    "imagem_url": "mat_q166_grafico.jpeg",
+                    "imagem_url": "img/questoes/foto20.jpg",
                     "alternativas": {
                         "A": "7.",
                         "B": "8.",
@@ -471,7 +471,7 @@
                     "id": 167,
                     "fonte": "ENEM",
                     "enunciado": "Uma empresa tem 400 funcionários, distribuídos em três setores: administrativo, logística e produção. O gráfico apresenta a distribuição quantitativa desses funcionários, por setor e por faixa etária. Uma viagem de férias será sorteada entre esses funcionários, de forma que todos terão igual probabilidade de serem sorteados. A maior probabilidade é que o funcionário sorteado esteja na faixa etária",
-                    "imagem_url": "mat_q167_grafico.jpeg",
+                    "imagem_url": "img/questoes/foto21.jpg",
                     "alternativas": {
                         "A": "entre 25 e 45 anos, pois é a faixa etária com maior quantidade de funcionários.",
                         "B": "entre 25 e 45 anos, pois é a única faixa etária cujas porcentagens são maiores do que as porcentagens mínimas de cada setor.",
@@ -486,7 +486,7 @@
                     "id": 168,
                     "fonte": "ENEM",
                     "enunciado": "Em um jogo virtual para celular, um personagem pode percorrer trajetórias retilíneas voando ou se deslocando ao longo de paredes. Considere que o personagem descreve a trajetória ABCDEF, em que os pontos A, D e E estão em um plano paralelo ao que contém os pontos B e C, sendo esses dois planos ortogonais ao plano da base que contém o ponto F, conforme a figura. A projeção ortogonal, sobre o plano da base, da trajetória ABCDEF descrita pelo personagem é",
-                    "imagem_url": "mat_q168_figura.jpeg",
+                    "imagem_url": "img/questoes/foto22.jpg",
                     "alternativas": {
                         "A": "A projeção de uma linha quebrada que não simplifica.",
                         "B": "A projeção de uma linha reta.",
@@ -516,7 +516,7 @@
                     "id": 170,
                     "fonte": "ENEM",
                     "enunciado": "Um aeroporto disponibiliza o serviço de transporte gratuito entre seus dois terminais utilizando os ônibus A e B, que partem simultaneamente, de hora em hora, de terminais diferentes. A distância entre os terminais é de 9 000 metros, e o percurso total dos ônibus, de um terminal ao outro, é monitorado por um sistema de cinco câmeras que cobrem diferentes partes do trecho, conforme o esquema. O alcance de cada uma das cinco câmeras é: câmera I: 1/5 do percurso; câmera II: 3/10 do percurso; câmera III: 1/10 do percurso; câmera IV: 1/10 do percurso; câmera V: 3/10 do percurso. Em determinado horário, o ônibus A parte do terminal 1 e realiza o percurso total com velocidade constante de 250 m/min; enquanto o ônibus B, que parte do terminal 2, realiza o percurso total com velocidade constante de 150 m/min. Qual câmera registra o momento em que os ônibus A e B se encontram?",
-                    "imagem_url": "mat_q170_esquema.jpeg",
+                    "imagem_url": "img/questoes/foto23.jpg",
                     "alternativas": {
                         "A": "I",
                         "B": "II",
@@ -531,7 +531,7 @@
                     "id": 171,
                     "fonte": "ENEM",
                     "enunciado": "A criptografia refere-se à construção e análise de protocolos que impedem terceiros de lerem mensagens privadas. Júlio César, imperador romano, utilizava um código para proteger as mensagens enviadas a seus generais. Nesse código, cada letra do alfabeto era substituída pela letra três posições à frente. Uma mensagem, em um alfabeto de 26 letras, foi codificada usando uma Cifra de César. Considere a probabilidade de se descobrir, aleatoriamente, o padrão utilizado nessa codificação, e que uma tentativa frustrada deverá ser eliminada nas tentativas seguintes. A probabilidade de se descobrir o padrão dessa Cifra de César apenas na terceira tentativa é dada por",
-                    "imagem_url": "mat_q171_esquema.jpeg",
+                    "imagem_url": "img/questoes/foto24.jpg",
                     "alternativas": {
                         "A": "1/25 + 1/25 + 1/25",
                         "B": "24/25 + 23/24 + 1/23",
@@ -606,7 +606,7 @@
                     "id": 176,
                     "fonte": "ENEM",
                     "enunciado": "Atualmente, há telefones celulares com telas de diversos tamanhos e em formatos retangulares. Alguns deles apresentam telas medindo 3 e 1/2 polegadas, com determinadas especificações técnicas. Além disso, em muitos modelos, com a inclusão de novas funções no celular, suas telas ficaram maiores, sendo muito comum encontrarmos atualmente telas medindo 4 e 5/6 polegadas, conforme a figura. A diferença de tamanho, em valor absoluto, entre as medidas, em polegada, das telas do celular 2 e do celular 1, representada apenas com uma casa decimal, é",
-                    "imagem_url": "mat_q176_figura.jpeg",
+                    "imagem_url": "img/questoes/foto25.jpg",
                     "alternativas": {
                         "A": "0,1.",
                         "B": "0,5.",
@@ -636,7 +636,7 @@
                     "id": 178,
                     "fonte": "ENEM",
                     "enunciado": "Um sistema de polias circulares e correias é um dos mecanismos responsáveis pela transmissão de movimento em máquinas rotativas. O manual de um motor traz uma figura representando um sistema composto por duas polias e uma correia de transmissão, tensionada e perfeitamente ajustada sobre as polias, de modo a não apresentar folgas nos contatos com as polias. Considere que as partes dessa correia que não ficam em contato com as polias são representadas por segmentos de reta tangentes às polias. Para substituição dessa correia, é necessária a especificação de seu comprimento. Considere 3 como valor aproximado para π. A medida do comprimento dessa correia, em centímetro, é",
-                    "imagem_url": "mat_q178_figura.jpeg",
+                    "imagem_url": "img/questoes/foto26.jpg",
                     "alternativas": {
                         "A": "54.",
                         "B": "60.",
@@ -651,7 +651,7 @@
                     "id": 179,
                     "fonte": "ENEM",
                     "enunciado": "A prefeitura de uma cidade planeja construir três postos de saúde. Esses postos devem ser construídos em locais equidistantes entre si e de forma que as distâncias desses três postos ao hospital dessa cidade sejam iguais. Foram conseguidos três locais para a construção dos postos de saúde que apresentam as características desejadas, e que distam 10 km entre si, conforme o esquema, no qual o ponto H representa o local onde está construído o hospital; os pontos P₁, P₂ e P₃, os postos de saúde; e esses quatro pontos estão em um mesmo plano. A distância, em quilômetro, entre o hospital e cada um dos postos de saúde, é um valor entre",
-                    "imagem_url": "mat_q179_esquema.jpeg",
+                    "imagem_url": "img/questoes/foto27.jpg",
                     "alternativas": {
                         "A": "2 e 3.",
                         "B": "4 e 5.",
@@ -666,7 +666,7 @@
                     "id": 180,
                     "fonte": "ENEM",
                     "enunciado": "Um tanque, em formato de paralelepípedo reto retângulo, tem em seu interior dois anteparos verticais, fixados na sua base e em duas paredes opostas, sendo perpendiculares a elas, conforme a figura. Esses anteparos, de espessuras desprezíveis, estão instalados de maneira a dividir a base do tanque em três retângulos congruentes, tendo suas alturas iguais à metade e a um quarto da altura do tanque. O tanque é abastecido por uma entrada situada no teto, através de um duto que despeja água a uma vazão constante, sendo necessárias 12 horas para finalizar o seu enchimento. O gráfico que descreve, em cada instante, a maior altura de coluna de água, dentre aquelas que vão sendo formadas ao longo do enchimento do tanque, é",
-                    "imagem_url": "mat_q180_figura_e_grafico.jpeg",
+                    "imagem_url": "img/questoes/foto28.jpg",
                     "alternativas": {
                         "A": "Gráfico com 3 segmentos lineares, com inclinações decrescentes.",
                         "B": "Gráfico com 3 segmentos lineares, com a 1ª e 3ª inclinações iguais, e a 2ª menor.",
